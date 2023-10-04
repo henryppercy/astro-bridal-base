@@ -1,5 +1,5 @@
 {
-  "name": "",
+  "name": "astro-bridal-base",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
@@ -10,6 +10,8 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^3.2.2"
+    "astro": "^3.2.2",
+    "firebase": "^10.4.0",
+    "firebase-admin": "^11.11.0"
   }
 }
