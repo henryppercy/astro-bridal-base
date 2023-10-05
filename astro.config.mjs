@@ -1,7 +1,9 @@
 import { defineConfig } from 'astro/config';
-import nodejs from '@astrojs/node';
+import node from "@astrojs/node";
 
 export default defineConfig({
   output: 'server',
-  adapter: nodejs(),
+  adapter: node({
+    mode: "standalone"
+  })
 });
