@@ -1,9 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import FormMain from '../components/organisms/FormMain.vue';
 ---
 
-<Layout title="George and Hattie">
-	<main>
-		<h1>George and Hattie's Wedding Site</h1>
-	</main>
+<Layout title="Astro Bridal Base">
+	<div class="h-screen">
+		<FormMain client:load />
+	</div>
 </Layout>
