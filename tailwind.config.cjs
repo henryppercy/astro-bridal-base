@@ -4,7 +4,7 @@ const defaultTheme = require('tailwindcss/defaultTheme')
 module.exports = {
 	content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
 	theme: {
-		extend:{
+		extend: {
 			colors: {
 				pink: {
 					DEFAULT: '#e0296a',
@@ -17,11 +17,9 @@ module.exports = {
 					DEFAULT: '#0a0a0a',
 				}
 			},
-			extend: {
-				fontFamily: {
-					'sans': ['"OpenSans"',  ...defaultTheme.fontFamily.sans],
-					'serif': ['"FS Kim"', ...defaultTheme.fontFamily.serif],
-				},
+			fontFamily: {
+				'sans': ['"Open Sans"',  ...defaultTheme.fontFamily.sans],
+				'serif': ['"FS Kim"', ...defaultTheme.fontFamily.serif],
 			}
 		}
 	},

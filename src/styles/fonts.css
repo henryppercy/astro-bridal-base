@@ -5,11 +5,3 @@
   font-weight: 500;
   src: url('/fonts/FS-kim.otf') format('otf');
 }
-
-@font-face {
-  font-display: swap;
-  font-family: 'Open Sans';
-  font-style: normal;
-  font-weight: 500;
-  src: url('/fonts/OpenSans-Medium.ttf') format('ttf');
-}
