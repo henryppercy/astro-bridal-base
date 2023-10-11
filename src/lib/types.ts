@@ -7,10 +7,10 @@ export type Guest = {
 
 export type Step = {
   title: string;
+  param: string;
   buttons: {
     text: string;
     nextStep: number;
-    retainCharacters: number;
   }[];
 };
 

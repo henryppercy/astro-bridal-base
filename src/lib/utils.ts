@@ -5,10 +5,10 @@ export const updating = ref(false);
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-const removeCharacter = async (retainCount: number) => {
-  while (title.value.length > retainCount) {
-      title.value = title.value.slice(0, -1);
-      await sleep(80);
+const removeCharacter = async () => {
+  while (title.value.length > 0) {
+    title.value = title.value.slice(0, -1);
+    await sleep(80);
   }
   await sleep(150);
 };
@@ -20,9 +20,9 @@ const addCharacter = async (str: string) => {
   }
 };
 
-export const changeTitle = async (newTitle: string, charsToRetain: number = 0) => {
+export const changeTitle = async (newTitle: string) => {
   updating.value = true;
-  await removeCharacter(charsToRetain);
-  await addCharacter(newTitle.slice(charsToRetain));
+  await removeCharacter();
+  await addCharacter(newTitle);
   updating.value = false;
 };
