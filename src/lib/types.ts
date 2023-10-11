@@ -6,6 +6,7 @@ export type Guest = {
 };
 
 export type Step = {
+  step: number;
   title: string;
   param: string;
   buttons: {
