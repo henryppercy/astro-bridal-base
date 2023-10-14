@@ -9,7 +9,8 @@
       "@pages/*": ["src/pages/*"],
       "@layouts/*": ["src/layouts/*"],
       "@firebase/*": ["src/lib/firebase/*"],
-      "@components/*": ["src/components/*"]
+      "@components/*": ["src/components/*"],
+      "@stores/*": ["src/stores/*"]
     }
   }
 }

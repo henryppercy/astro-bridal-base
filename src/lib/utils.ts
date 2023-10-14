@@ -1,25 +1,27 @@
-import { ref } from 'vue';
+import { 
+  title, updating, addLetterTime, delayBeforeTypingIn, 
+  longTitleLength, removeLetterTimeFast, removeLetterTimeSlow, 
+  removeSentenceTime, slowCharacters 
+} from '@stores/introStore';
 
-export const title = ref('H&G');
-export const updating = ref(false);
-export const typeInSeed = 100;
-export const typeInDelay = 150;
-export const typeOutSeed = 80;
-
-export const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 const removeCharacter = async () => {
+  let removeLetterTime = removeSentenceTime/title.value.length;
+  if (title.value.length > longTitleLength) removeLetterTime = removeLetterTimeFast;
+
   while (title.value.length > 0) {
     title.value = title.value.slice(0, -1);
-    await sleep(typeOutSeed);
+    if (title.value.length <= slowCharacters) removeLetterTime = removeLetterTimeSlow;
+    await sleep(removeLetterTime);
   }
-  await sleep(typeInDelay);
+  await sleep(delayBeforeTypingIn); // pause before typing in
 };
 
 const addCharacter = async (str: string) => {
   for (let i = 0; i < str.length; i++) {
       title.value += str.charAt(i);
-      await sleep(typeInSeed);
+      await sleep(addLetterTime);
   }
 };
 
