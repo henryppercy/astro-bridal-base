@@ -5,7 +5,7 @@
     </h1>
   </header> 
   <main class="h-1/2">
-    <div class="pt-8 px-8 md:px-12 flex items-start justify-evenly flex-wrap">
+    <div class="pt-8 px-8 gap-10 md:px-12 flex items-start justify-evenly flex-wrap">
       <TransitionGroup
         enter-from-class="translate-y-full opacity-0"
         enter-to-class="translate-y-0 opacity-100"
@@ -22,11 +22,11 @@
       </TransitionGroup>
     </div>
     <nav class="fixed flex right-6 bottom-6">
-      <ul class="flex gap-3">
-        <li @click="handleBackNavigation" class="font-sans uppercase text-xs tracking-[0.3rem] border-[0.2rem] border-white hover:text-black transition-colors rounded-full px-5 py-1 cursor-pointer" :disabled="!stepHistory.length || updating" :class="{ 'cursor-not-allowed' : !stepHistory.length || updating}">
+      <ul class="flex gap-5 md:gap-8">
+        <li v-if="stepHistory.length" @click.prevent="handleBackNavigation" class="font-sans uppercase text-xs tracking-[0.3rem] border-[0.2rem] border-white hover:text-black transition-colors rounded-full py-1 cursor-pointer" :disabled="updating" :class="{ 'cursor-not-allowed' : updating}">
           Back
         </li>
-        <li class="font-sans uppercase text-xs tracking-[0.3rem] border-[0.2rem] border-white hover:text-black transition-colors rounded-full px-5 py-1"><a href="/help">Help</a></li>
+        <li class="font-sans uppercase text-xs tracking-[0.3rem] border-[0.2rem] border-white hover:text-black transition-colors rounded-full py-1"><a href="/help">Help</a></li>
       </ul>
     </nav>
   </main>
@@ -55,7 +55,7 @@ const step = ref<Step>({ step: 0, title: 'H&G', param: 'H&G', buttons: [] });
 const stepHistory = ref<Step[]>([]);
 
 const handleBackNavigation = () => {
-  if (stepHistory.value.length > 0) {
+  if (stepHistory.value.length > 0 && (updating.value === false)) {
     const previousStep = stepHistory.value.pop();
     if (previousStep) changeStep(previousStep.title, previousStep.step, false);
   }
