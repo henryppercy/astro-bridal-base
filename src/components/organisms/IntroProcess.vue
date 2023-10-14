@@ -23,7 +23,7 @@
     </div>
     <nav class="fixed flex right-6 bottom-6">
       <ul class="flex gap-3">
-        <li @click="" class="font-sans uppercase text-xs tracking-[0.3rem] border-[0.2rem] border-white hover:text-black transition-colors rounded-full px-5 py-1 cursor-pointer">
+        <li @click="handleBackNavigation" class="font-sans uppercase text-xs tracking-[0.3rem] border-[0.2rem] border-white hover:text-black transition-colors rounded-full px-5 py-1 cursor-pointer" :disabled="!stepHistory.length || updating" :class="{ 'cursor-not-allowed' : !stepHistory.length || updating}">
           Back
         </li>
         <li class="font-sans uppercase text-xs tracking-[0.3rem] border-[0.2rem] border-white hover:text-black transition-colors rounded-full px-5 py-1"><a href="/help">Help</a></li>
@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import type { Step } from '@lib/types';
 import { changeTitle } from '@lib/utils';
 import { 
@@ -49,9 +49,20 @@ onMounted(() => {
   }, 2000);
 });
 
-const step = ref<Step>({ step: 0, title: 'H&G', param: 'H&G', buttons: [] });
+onBeforeUnmount(() => stepHistory.value = []);
 
-const changeStep = (newTitle: string, nextStep: number) => {
+const step = ref<Step>({ step: 0, title: 'H&G', param: 'H&G', buttons: [] });
+const stepHistory = ref<Step[]>([]);
+
+const handleBackNavigation = () => {
+  if (stepHistory.value.length > 0) {
+    const previousStep = stepHistory.value.pop();
+    if (previousStep) changeStep(previousStep.title, previousStep.step, false);
+  }
+};
+
+const changeStep = (newTitle: string, nextStep: number, addToHistory: boolean = true) => {
+  if (addToHistory && step.value.title !== 'H&G') stepHistory.value.push(step.value);
   let removeSpeed = removeSentenceTime / title.value.length;
 
   if (title.value.length > longTitleLength) removeSpeed = removeLetterTimeFast;
