@@ -6,7 +6,7 @@ import {
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-const removeCharacter = async () => {
+export const removeCharacter = async () => {
   let removeLetterTime = removeSentenceTime/title.value.length;
   if (title.value.length > longTitleLength) removeLetterTime = removeLetterTimeFast;
 
@@ -18,10 +18,10 @@ const removeCharacter = async () => {
   await sleep(delayBeforeTypingIn); // pause before typing in
 };
 
-const addCharacter = async (str: string) => {
+export const addCharacter = async (str: string) => {
   for (let i = 0; i < str.length; i++) {
-      title.value += str.charAt(i);
-      await sleep(addLetterTime);
+    title.value += str.charAt(i);
+    await sleep(addLetterTime);
   }
 };
 

@@ -1,10 +1,11 @@
 import { ref } from 'vue';
 import type { Steps } from '@lib/types';
 
-export const title = ref('H&G');
+export const title = ref('');
 export const updating = ref(false);
 
 export const removeSentenceTime = 800;
+
 export const removeLetterTimeFast = 50;
 export const removeLetterTimeSlow = 300;
 
@@ -20,7 +21,7 @@ export const steps: Steps = {
     step: 0,
     title: 'H&G', 
     param: 'H&G',
-    buttons: [] 
+    buttons: []
   },
   1: {
     step: 1,
