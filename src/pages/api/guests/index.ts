@@ -3,24 +3,45 @@ import { app } from "@firebase/server";
 import { getFirestore } from "firebase-admin/firestore";
 import type { Guest } from "@lib/types";
 import { generateGuestArray } from "@lib/utils";
+import { guestSchema } from "@lib/schema/guestSchema";
+import type { ZodError } from "zod";
 
 export const POST: APIRoute = async ({ request, redirect }) => {
   const formData = await request.formData();
   
   const guests: Guest[] = generateGuestArray(formData);
 
-  try {
-    const db = getFirestore(app);
-    const guestsRef = db.collection("guests");
-    guests.forEach(async (guest) => await guestsRef.add(guest));
-  } catch (error) {
-    console.log(error);
-    return new Response("Something went wrong", {
-      status: 500,
+  const validatedGuests: Guest[] = [];
+  const validationErrors: ZodError[] = [];
+
+  for (const guestData of guests) {
+      const validatedGuest = guestSchema.safeParse(guestData);      
+      
+      if (validatedGuest.success) {
+        validatedGuests.push(validatedGuest.data);
+      } else {
+        validationErrors.push(validatedGuest.error); 
+      }
+    }
+    
+  if (validationErrors.length > 0) {
+    return new Response(JSON.stringify(validationErrors), {
+      status: 422,
+      headers: {
+        "content-type": "application/json; charset=UTF-8",
+      },
     });
   }
 
-  return redirect("/");
+  try {
+    const db = getFirestore(app);
+    const guestsRef = db.collection("guests");
+    validatedGuests.forEach(async (guest) => await guestsRef.add(guest));
+  } catch (error) {
+    return new Response("Something went wrong", { status: 500 });
+  }
+
+  return redirect("/rsvp");
 };
 
 export const GET: APIRoute = async () => {

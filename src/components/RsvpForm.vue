@@ -36,11 +36,12 @@
 import { onMounted, onBeforeMount, ref } from 'vue';
 import { changeTitle } from '@lib/utils';
 import { title } from '@stores/introStore';
-import type { GuestFormField } from '@lib/types';
+import type { GuestFieldError, GuestFormField } from '@lib/types';
 import IntroMain from './IntroMain.vue';
 import IntroHeader from '@components/IntroHeader.vue';
 import SlideIn from '@components/SlideIn.vue';
 import RsvpField from '@components/RsvpField.vue';
+import type { ZodError } from 'astro/zod';
 
 const showForm = ref(false);
 
@@ -83,7 +84,7 @@ const removeGuest = () => {
 
 const submitForm = async (e: Event) => {
   const formData = new FormData(e.currentTarget as HTMLFormElement);
-  
+
   try {
     const response = await fetch('/api/guests', {
       method: 'POST',
@@ -91,9 +92,28 @@ const submitForm = async (e: Event) => {
     });
 
     if (!response.ok) {
+      if (response.status === 422) {
+        const data = await response.json();
+
+        data.forEach((error: ZodError, index: number) => {
+          const guestErrors: GuestFieldError = error.issues.reduce((acc, issue) => {
+            acc[issue.path[0]] = issue.message;
+            return acc;
+          }, {
+            first_name: '',
+            last_name: '',
+            email: '',
+            confirm_email: '',
+            dietary_requirements: ''
+          });
+
+          guests.value[index].errors = guestErrors;
+        });
+      }
+    }
+
+    if (response.ok) {
       const data = await response.json();
-      console.error('Error submitting form:', data);
-    } else {
       // window.location.href = '/thank-you';
       console.log('Successfully submitted');
     }

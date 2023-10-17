@@ -23,6 +23,7 @@ export const generateGuestArray = (formData: FormData): Guest[] => {
       first_name: formData.get(`first_name_${guestNumber}`) as string,
       last_name: formData.get(`last_name_${guestNumber}`) as string,
       email: formData.get(`email_${guestNumber}`) as string,
+      confirm_email: formData.get(`confirm_email_${guestNumber}`) as string,
       dietary_requirements: formData.get(`dietary_requirements_${guestNumber}`) as string | undefined,
     };
     guests.push(guest);
