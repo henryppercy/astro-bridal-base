@@ -5,14 +5,12 @@
   <IntroMain>
     <SlideIn>
       <form v-if="showForm" @submit.prevent="submitForm" class="flex flex-col md:flex-row gap-5">
-        <div class="space-y-16 pb-16">
+        <div class="space-y-16 pb-16 w-3/4">
           <template v-for="(guest, index) in guests" :key="index">
-            <SlideIn>
-              <RsvpField 
-                :guest-no="index + 1" 
-                :errors="guest.errors"
-              />
-            </SlideIn>
+            <RsvpField 
+              :guest-no="index + 1" 
+              :errors="guest.errors"
+            />
           </template>
           <div class="space-x-4">
             <button class="font-sans uppercase text-sm md:text-lg tracking-[0.1rem] md:tracking-[0.3rem] border-[0.25rem] border-black hover:bg-black hover:text-white transition-colors rounded-full px-5 py-1 h-fit whitespace-nowrap" @click.prevent="addGuest">Add Guest</button>
@@ -97,7 +95,8 @@ const submitForm = async (e: Event) => {
 
         data.forEach((error: ZodError, index: number) => {
           const guestErrors: GuestFieldError = error.issues.reduce((acc, issue) => {
-            acc[issue.path[0]] = issue.message;
+            const path = issue.path[0] as keyof GuestFieldError;
+            acc[path] = issue.message;
             return acc;
           }, {
             first_name: '',
