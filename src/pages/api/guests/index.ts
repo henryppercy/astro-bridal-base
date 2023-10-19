@@ -15,33 +15,33 @@ export const POST: APIRoute = async ({ request, redirect }) => {
   const validationErrors: ZodError[] = [];
 
   for (const guestData of guests) {
-      const validatedGuest = guestSchema.safeParse(guestData);      
-      
-      if (validatedGuest.success) {
-        validatedGuests.push(validatedGuest.data);
-      } else {
-        validationErrors.push(validatedGuest.error); 
-      }
+    const validatedGuest = guestSchema.safeParse(guestData);      
+    
+    if (validatedGuest.success) {
+      validatedGuests.push(validatedGuest.data);
+    } else {
+      validationErrors.push(validatedGuest.error); 
     }
+  }
     
   if (validationErrors.length > 0) {
     return new Response(JSON.stringify(validationErrors), {
       status: 422,
       headers: {
-        "content-type": "application/json; charset=UTF-8",
-      },
+        "content-type": "application/json"
+      }
     });
   }
 
   try {
     const db = getFirestore(app);
     const guestsRef = db.collection("guests");
-    validatedGuests.forEach(async (guest) => await guestsRef.add(guest));
+    await validatedGuests.forEach(async (guest) => await guestsRef.add(guest));
   } catch (error) {
     return new Response("Something went wrong", { status: 500 });
   }
 
-  return redirect("/rsvp");
+  return new Response(null, { status: 200 });
 };
 
 export const GET: APIRoute = async () => {

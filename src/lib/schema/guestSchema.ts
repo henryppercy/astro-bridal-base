@@ -25,11 +25,10 @@ export const guestSchema = z.object({
     .transform((value) => value.toLowerCase()),
   dietary_requirements: z
     .string()
-    .min(2, { message: "Dietary requirements must be at least 2 characters long" })
     .max(50, { message: "Dietary requirements must be less than 50 characters long" })
     .optional()
 })
 .refine(data => data.email === data.confirm_email, {
-  message: "Email and confirm_email must be the same",
+  message: "Emails do not match",
   path: ["confirm_email"]
 });

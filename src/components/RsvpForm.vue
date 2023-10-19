@@ -76,11 +76,24 @@ const addGuest = () => {
   });
 };
 
+const clearErrors = () => {
+  guests.value.forEach((guest) => {
+    guest.errors = {
+      first_name: '',
+      last_name: '',
+      email: '',
+      confirm_email: '',
+      dietary_requirements: ''
+    };
+  });
+};
+
 const removeGuest = () => {
   if (guests.value.length > 1) guests.value.pop();
 };
-
 const submitForm = async (e: Event) => {
+  clearErrors();
+
   const formData = new FormData(e.currentTarget as HTMLFormElement);
 
   try {
@@ -112,8 +125,8 @@ const submitForm = async (e: Event) => {
     }
 
     if (response.ok) {
-      const data = await response.json();
       // window.location.href = '/thank-you';
+      showForm.value = false;
       console.log('Successfully submitted');
     }
   } catch (error) {
