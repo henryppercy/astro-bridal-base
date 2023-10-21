@@ -5,41 +5,40 @@
   <IntroMain>
     <SlideIn>
       <form v-if="showForm" @submit.prevent="submitForm" class="flex flex-col md:flex-row gap-5">
-        <div class="space-y-16 pb-16 w-3/4">
+        <div class="space-y-16 pb-16 md:px-40 w-full">
           <template v-for="(guest, index) in guests" :key="index">
             <RsvpField 
               :guest-no="index + 1" 
               :errors="(guest.index === index + 1) ? guest.errors : { first_name: '', last_name: '', email: '', confirm_email: '', dietary_requirements: '' }"
             />
           </template>
-          <div class="space-x-4">
-            <button class="font-sans uppercase text-sm md:text-lg tracking-[0.1rem] md:tracking-[0.3rem] border-[0.25rem] border-black hover:bg-black hover:text-white transition-colors rounded-full px-5 py-1 h-fit whitespace-nowrap" @click.prevent="addGuest">Add Guest</button>
-            <button v-if="guests.length > 1" class="font-sans uppercase text-sm md:text-lg tracking-[0.1rem] md:tracking-[0.3rem] border-[0.25rem] border-black hover:bg-black hover:text-white transition-colors rounded-full px-5 py-1 h-fit whitespace-nowrap" @click.prevent="removeGuest">Remove Guest</button>
+          <div class="flex items-center justify-between flex-col max-md:gap-5 md:flex-row">
+            <div class="space-x-4 max-md:flex max-md:justify-between w-full">
+              <button class="font-sans uppercase text-sm md:text-lg tracking-[0.1rem] md:tracking-[0.3rem] border-[0.25rem] border-black hover:bg-black hover:text-white transition-colors rounded-full px-5 py-1 h-fit whitespace-nowrap" @click.prevent="addGuest">New Guest</button>
+              <button v-if="guests.length > 1" class="font-sans uppercase text-sm md:text-lg tracking-[0.1rem] md:tracking-[0.3rem] border-[0.25rem] border-black hover:bg-black hover:text-white transition-colors rounded-full px-5 py-1 h-fit whitespace-nowrap" @click.prevent="removeGuest">Remove Guest</button>
+            </div>
+            <button class="font-sans uppercase text-sm md:text-xl tracking-[0.1rem] md:tracking-[0.3rem] border-[0.25rem] border-black hover:bg-black hover:text-white transition-colors rounded-full px-5 py-1 h-fit whitespace-nowrap" type="submit">Finished</button>
           </div>
-        </div>
-        <div class="flex justify-center">
-          <button class="font-sans uppercase text-sm md:text-xl tracking-[0.1rem] md:tracking-[0.3rem] border-[0.25rem] border-black hover:bg-black hover:text-white transition-colors rounded-full px-5 py-1 h-fit whitespace-nowrap" type="submit">Submit</button>
         </div>
       </form>
     </SlideIn>
   </IntroMain>
-  <nav class="fixed flex right-6 bottom-6">
-    <ul class="flex gap-5 md:gap-8">
+  <nav class="fixed flex right-6 bottom-0 max-md:bg-white w-full h-10">
+    <ul class="flex items-center justify-end gap-5 md:gap-8 w-full">
       <li class="font-sans uppercase text-xs tracking-[0.3rem] border-[0.2rem] border-white hover:text-black transition-colors rounded-full px-5 py-1"><a href="/help">Help</a></li>
     </ul>
   </nav>
 </template>
 
 <script setup lang="ts">
-import { onMounted, onBeforeMount, ref } from 'vue';
-import { changeTitle } from '@lib/utils';
-import { title } from '@stores/introStore';
-import type { Guest, GuestFormField, IndexedValidationError } from '@lib/types';
 import IntroMain from './IntroMain.vue';
 import IntroHeader from '@components/IntroHeader.vue';
 import SlideIn from '@components/SlideIn.vue';
 import RsvpField from '@components/RsvpField.vue';
-import type { ZodError } from 'astro/zod';
+import { title } from '@stores/introStore';
+import { changeTitle } from '@lib/utils';
+import { onMounted, onBeforeMount, ref } from 'vue';
+import type { Guest, GuestFormField, IndexedValidationError } from '@lib/types';
 
 const showForm = ref(false);
 
