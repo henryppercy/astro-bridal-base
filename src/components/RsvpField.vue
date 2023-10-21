@@ -28,10 +28,10 @@
 </template>
 
 <script setup lang="ts">
-import type { GuestFieldError } from '@lib/types';
+import type { Guest } from '@lib/types';
 
 defineProps<{
   guestNo: number, 
-  errors: GuestFieldError
+  errors: Guest
 }>();
 </script>

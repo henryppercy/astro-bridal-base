@@ -1,29 +1,28 @@
 import type { APIRoute } from "astro";
 import { app } from "@firebase/server";
 import { getFirestore } from "firebase-admin/firestore";
-import type { Guest } from "@lib/types";
+import type { Guest, IndexedValidationError } from "@lib/types";
 import { generateGuestArray } from "@lib/utils";
 import { guestSchema } from "@lib/schema/guestSchema";
-import type { ZodError } from "zod";
 
 export const POST: APIRoute = async ({ request, redirect }) => {
   const formData = await request.formData();
-  
+
   const guests: Guest[] = generateGuestArray(formData);
 
   const validatedGuests: Guest[] = [];
-  const validationErrors: ZodError[] = [];
+  const validationErrors: IndexedValidationError[] = [];
 
-  for (const guestData of guests) {
-    const validatedGuest = guestSchema.safeParse(guestData);      
-    
+  for (const [index, guestData] of guests.entries()) {
+    const validatedGuest = guestSchema.safeParse(guestData);
+  
     if (validatedGuest.success) {
       validatedGuests.push(validatedGuest.data);
     } else {
-      validationErrors.push(validatedGuest.error); 
+      validationErrors.push({ index, error: validatedGuest.error });
     }
   }
-    
+
   if (validationErrors.length > 0) {
     return new Response(JSON.stringify(validationErrors), {
       status: 422,

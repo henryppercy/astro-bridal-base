@@ -1,3 +1,5 @@
+import type { ZodError } from "zod";
+
 export type Guest = {
   first_name: string;
   last_name: string;
@@ -6,16 +8,10 @@ export type Guest = {
   dietary_requirements?: string;
 };
 
-export type GuestFieldError = {
-  first_name: string,
-  last_name: string,
-  email: string,
-  confirm_email: string,
-  dietary_requirements: string
-};
 
 export type GuestFormField = {
-  errors: GuestFieldError
+  index: number;
+  errors: Guest
 }
 
 export type Step = {
@@ -30,4 +26,9 @@ export type Step = {
 
 export type Steps = {
   [key: number]: Step;
+};
+
+export type IndexedValidationError = {
+  index: number;
+  error: ZodError;
 };

@@ -9,7 +9,7 @@
           <template v-for="(guest, index) in guests" :key="index">
             <RsvpField 
               :guest-no="index + 1" 
-              :errors="guest.errors"
+              :errors="(guest.index === index + 1) ? guest.errors : { first_name: '', last_name: '', email: '', confirm_email: '', dietary_requirements: '' }"
             />
           </template>
           <div class="space-x-4">
@@ -34,7 +34,7 @@
 import { onMounted, onBeforeMount, ref } from 'vue';
 import { changeTitle } from '@lib/utils';
 import { title } from '@stores/introStore';
-import type { GuestFieldError, GuestFormField } from '@lib/types';
+import type { Guest, GuestFormField, IndexedValidationError } from '@lib/types';
 import IntroMain from './IntroMain.vue';
 import IntroHeader from '@components/IntroHeader.vue';
 import SlideIn from '@components/SlideIn.vue';
@@ -54,6 +54,7 @@ onMounted(() => {
 
 const guests = ref<GuestFormField[]>([
   {
+    index: 1,
     errors: {
       first_name: '',
       last_name: '',
@@ -66,6 +67,7 @@ const guests = ref<GuestFormField[]>([
 
 const addGuest = () => {
   guests.value.push({
+    index: guests.value.length + 1,
     errors: {
       first_name: '',
       last_name: '',
@@ -91,6 +93,7 @@ const clearErrors = () => {
 const removeGuest = () => {
   if (guests.value.length > 1) guests.value.pop();
 };
+
 const submitForm = async (e: Event) => {
   clearErrors();
 
@@ -106,10 +109,11 @@ const submitForm = async (e: Event) => {
       if (response.status === 422) {
         const data = await response.json();
 
-        data.forEach((error: ZodError, index: number) => {
-          const guestErrors: GuestFieldError = error.issues.reduce((acc, issue) => {
-            const path = issue.path[0] as keyof GuestFieldError;
+        data.forEach((guestError: IndexedValidationError) => {
+          const guestErrors: Guest = guestError.error.issues.reduce((acc, issue) => {
+            const path = issue.path[0] as keyof Guest;
             acc[path] = issue.message;
+
             return acc;
           }, {
             first_name: '',
@@ -119,7 +123,7 @@ const submitForm = async (e: Event) => {
             dietary_requirements: ''
           });
 
-          guests.value[index].errors = guestErrors;
+          guests.value[guestError.index] = { errors: guestErrors, index: guestError.index + 1 };
         });
       }
     }
