@@ -1,48 +1,46 @@
 import type { APIRoute } from "astro";
 import { app } from "@firebase/server";
 import { getFirestore } from "firebase-admin/firestore";
-import type { Guest } from "@lib/types";
+import type { Guest, IndexedValidationError } from "@lib/types";
+import { generateGuestArray } from "@lib/utils";
+import { guestSchema } from "@lib/schema/guestSchema";
 
 export const POST: APIRoute = async ({ request, redirect }) => {
   const formData = await request.formData();
+
+  const guests: Guest[] = generateGuestArray(formData);
+
+  const validatedGuests: Guest[] = [];
+  const validationErrors: IndexedValidationError[] = [];
+
+  for (const [index, guestData] of guests.entries()) {
+    const validatedGuest = guestSchema.safeParse(guestData);
   
-  const first_name = formData.get("first_name")?.toString().trim();
-  const last_name = formData.get("last_name")?.toString().trim();
-  const email = formData.get("email")?.toString().trim();
-  const dietary_requirements = formData.get("dietary_requirements")?.toString().trim();
-  
-  if (!first_name || !last_name || !email) {
-    return new Response("Missing required fields or invalid email", {
-      status: 422,
-    });
-  }
-  
-  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-  if (email && !emailRegex.test(email)) {
-    return new Response("Invalid email", {
-      status: 422,
-    });
+    if (validatedGuest.success) {
+      validatedGuests.push(validatedGuest.data);
+    } else {
+      validationErrors.push({ index, error: validatedGuest.error });
+    }
   }
 
-  const guest: Guest = {
-    first_name,
-    last_name,
-    email,
-    dietary_requirements
-  };
+  if (validationErrors.length > 0) {
+    return new Response(JSON.stringify(validationErrors), {
+      status: 422,
+      headers: {
+        "content-type": "application/json"
+      }
+    });
+  }
 
   try {
     const db = getFirestore(app);
     const guestsRef = db.collection("guests");
-    await guestsRef.add(guest);
+    await validatedGuests.forEach(async (guest) => await guestsRef.add(guest));
   } catch (error) {
-    console.log(error);
-    return new Response("Something went wrong", {
-      status: 500,
-    });
+    return new Response("Something went wrong", { status: 500 });
   }
 
-  return redirect("/");
+  return new Response(null, { status: 200 });
 };
 
 export const GET: APIRoute = async () => {
