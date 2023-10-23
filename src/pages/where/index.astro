@@ -1,6 +1,9 @@
 ---
-import StaticLayout from '@layouts/DefaultLayout.astro';
+import StaticLayout from '@layouts/StaticLayout.astro';
 ---
 <StaticLayout title="Where">
-Test
+  <h1 slot="header" class="font-serif uppercase text-pink text-[10rem]">Where</h1>
+  <section slot="main">
+    Put directions here
+  </section>
 </StaticLayout>
