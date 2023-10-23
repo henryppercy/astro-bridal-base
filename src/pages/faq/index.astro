@@ -2,6 +2,60 @@
 import StaticLayout from '@layouts/StaticLayout.astro';
 ---
 
-<StaticLayout>
-  <h1>FAQ</h1>
+<StaticLayout title="FAQ">
+  <h1 slot="header" class="font-serif uppercase text-pink text-[10rem]">FAQ</h1>
+  <section slot="main" class="pr-24">
+    <ul class="space-y-10">
+      <li class="space-y-1.5">
+        <div class="flex text-pink uppercase text-xl tracking-wide">
+          <span>Q.&nbsp;</span>
+          <h2>Will there be options for guests with dietary restrictions or allergies?</h2>
+        </div>
+        <div class="flex uppercase text-xl tracking-wide">
+          <span>A.&nbsp;</span>
+          <p>Yes, we want to accommodate all our guests. Please let us know about any dietary restrictions or allergies when you RSVP, and our catering team will provide suitable meal options.</p>
+        </div>
+      </li>
+      <li class="space-y-1.5">
+        <div class="flex text-pink uppercase text-xl tracking-wide">
+          <span>Q.&nbsp;</span>
+          <h2>Can I see the menu in advance?</h2>
+        </div>
+        <div class="flex uppercase text-xl tracking-wide">
+          <span>A.&nbsp;</span>
+          <p>Certainly! We'll be sharing the menu details on our wedding website or in the invitations so you can plan accordingly.</p>
+        </div>
+      </li>
+      <li class="space-y-1.5">
+        <div class="flex text-pink uppercase text-xl tracking-wide">
+          <span>Q.&nbsp;</span>
+          <h2> Is there a vegetarian or vegan meal option available?</h2>
+        </div>
+        <div class="flex uppercase text-xl tracking-wide">
+          <span>A.&nbsp;</span>
+          <p>Absolutely, we will have delicious vegetarian and vegan meal choices to cater to our guests with dietary preferences.</p>
+        </div>
+      </li>
+      <li class="space-y-1.5">
+        <div class="flex text-pink uppercase text-xl tracking-wide">
+          <span>Q.&nbsp;</span>
+          <h2>Can I request a specific dish or customize my meal?</h2>
+        </div>
+        <div class="flex uppercase text-xl tracking-wide">
+          <span>A.&nbsp;</span>
+          <p>While we can't accommodate individual dish requests, we'll provide a variety of meal options to suit different tastes.</p>
+        </div>
+      </li>
+      <li class="space-y-1.5">
+        <div class="flex text-pink uppercase text-xl tracking-wide">
+          <span>Q.&nbsp;</span>
+          <h2>What is the timeline for dinner service?</h2>
+        </div>
+        <div class="flex uppercase text-xl tracking-wide">
+          <span>A.&nbsp;</span>
+          <p>Dinner service will begin at [insert time], and we'll ensure there's ample time for everyone to enjoy their meal and celebrate with us.</p>
+        </div>
+      </li>
+    </ul>
+  </section>
 </StaticLayout>
