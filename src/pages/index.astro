@@ -1,9 +1,10 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from '@layouts/Layout.astro';
+import IntroProcess from '@components/IntroProcess.vue';
 ---
 
-<Layout title="George and Hattie">
-	<main>
-		<h1>George and Hattie's Wedding Site</h1>
-	</main>
+<Layout title="Astro Bridal Base">
+	<div class="h-screen">
+		<IntroProcess client:load />
+	</div>
 </Layout>
