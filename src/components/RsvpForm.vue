@@ -130,7 +130,6 @@ const submitForm = async (e: Event) => {
     if (response.ok) {
       // window.location.href = '/thank-you';
       showForm.value = false;
-      console.log(response.json());
       console.log('Successfully submitted');
     }
   } catch (error) {
