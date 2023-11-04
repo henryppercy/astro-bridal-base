@@ -35,13 +35,15 @@ export const POST: APIRoute = async ({ request, redirect  }) => {
   try {
     const db = getFirestore(app);
     const guestsRef = db.collection("guests");
-    await validatedGuests.forEach(async (guest) => await guestsRef.add(guest));
+    const addGuestsPromises = validatedGuests.map(guest => guestsRef.add(guest));
+
+    await Promise.all(addGuestsPromises);
+
+    return new Response(null, { status: 200 });
   } catch (error) {
     return new Response("Something went wrong", { status: 500 });
   }
-  
-  return new Response(null, { status: 200 });
-};
+}
 
 export const GET: APIRoute = async () => {
   try {
