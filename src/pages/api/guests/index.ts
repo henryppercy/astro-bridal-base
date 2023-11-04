@@ -36,6 +36,7 @@ export const POST: APIRoute = async ({ request, redirect  }) => {
     const db = getFirestore(app);
     const guestsRef = db.collection("guests");
     const addGuestsPromises = validatedGuests.map(guest => guestsRef.add(guest));
+
     await Promise.all(addGuestsPromises);
 
     return new Response(null, { status: 200 });
