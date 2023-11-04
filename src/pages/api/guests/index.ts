@@ -36,6 +36,8 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     const db = getFirestore(app);
     const guestsRef = db.collection("guests");
     await validatedGuests.forEach(async (guest) => await guestsRef.add(guest));
+    console.log("Guests added to database");
+    console.log(guestsRef);
   } catch (error) {
     return new Response("Something went wrong", { status: 500 });
   }
