@@ -6,8 +6,7 @@ import { generateGuestArray } from "@lib/utils";
 import { guestSchema } from "@lib/schema/guestSchema";
 import { sendEmail } from "@lib/email/mailer";
 
-
-export const POST: APIRoute = async ({ request, redirect }) => {
+export const POST: APIRoute = async ({ request }) => {
   const formData = await request.formData();
 
   const guests: Guest[] = generateGuestArray(formData);

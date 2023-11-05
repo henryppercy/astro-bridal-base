@@ -15,9 +15,22 @@ const { title } = Astro.props;
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link rel="preload" href="/fonts/FS-Kim.woff2" as="font" type="font/woff2" crossorigin="anonymous">
 		<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&display=swap" rel="stylesheet">
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
+		<style>
+			@font-face {
+				font-display: swap;
+				font-family: 'FS Kim';
+				font-style: normal;
+				font-weight: normal;
+				src: url('/fonts/FS-kim.woff2') format('woff2');
+			}
+			h1 {
+				font-family: 'FS Kim', serif;
+			}
+		</style>
 	</head>
 	<body>
 		<slot />
