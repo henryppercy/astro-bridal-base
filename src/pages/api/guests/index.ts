@@ -4,7 +4,7 @@ import { getFirestore } from "firebase-admin/firestore";
 import type { Guest, IndexedValidationError } from "@lib/types";
 import { generateGuestArray } from "@lib/utils";
 import { guestSchema } from "@lib/schema/guestSchema";
-import { sendEmail } from "@lib/email/emailer";
+import { sendEmail } from "@lib/email/mailer";
 
 
 export const POST: APIRoute = async ({ request, redirect }) => {
