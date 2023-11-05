@@ -1,28 +1,15 @@
 import type { APIRoute } from "astro";
 import { app } from "@firebase/server";
 import { getFirestore } from "firebase-admin/firestore";
-import type { Guest, IndexedValidationError } from "@lib/types";
-import { generateGuestArray } from "@lib/utils";
-import { guestSchema } from "@lib/schema/guestSchema";
+import type { Guest } from "@lib/types";
+import { generateGuestArray, validateGuests } from "@lib/utils";
 import { sendEmail } from "@lib/email/mailer";
 
 export const POST: APIRoute = async ({ request, redirect }) => {
   const formData = await request.formData();
-
   const guests: Guest[] = generateGuestArray(formData);
 
-  const validatedGuests: Guest[] = [];
-  const validationErrors: IndexedValidationError[] = [];
-
-  for (const [index, guestData] of guests.entries()) {
-    const validatedGuest = guestSchema.safeParse(guestData);
-  
-    if (validatedGuest.success) {
-      validatedGuests.push(validatedGuest.data);
-    } else {
-      validationErrors.push({ index, error: validatedGuest.error });
-    }
-  }
+  const { validatedGuests, validationErrors } = validateGuests(guests);
 
   if (validationErrors.length > 0) {
     return new Response(JSON.stringify(validationErrors), {

@@ -4,7 +4,7 @@
   </IntroHeader>
   <IntroMain>
     <SlideIn>
-      <form v-if="showForm" @submit.prevent="submitForm" class="flex flex-col md:flex-row gap-5">
+      <form ref="guestFormData" v-if="showForm" @submit.prevent="submitForm" class="flex flex-col md:flex-row gap-5">
         <div class="space-y-16 pb-16 md:px-40 w-full">
           <template v-for="(guest, index) in guests" :key="index">
             <RsvpField 
@@ -14,7 +14,7 @@
           </template>
           <div class="flex items-center justify-between flex-col max-md:gap-5 md:flex-row">
             <div class="space-x-4 max-md:flex max-md:justify-between w-full">
-              <button class="font-sans uppercase text-sm md:text-lg tracking-[0.1rem] md:tracking-[0.3rem] border-[0.25rem] border-black hover:bg-black hover:text-white transition-colors rounded-full px-5 py-1 h-fit whitespace-nowrap" @click.prevent="addGuest">New Guest</button>
+              <button class="font-sans uppercase text-sm md:text-lg tracking-[0.1rem] md:tracking-[0.3rem] border-[0.25rem] border-black hover:bg-black hover:text-white transition-colors rounded-full px-5 py-1 h-fit whitespace-nowrap" @click.prevent="addGuest" >New Guest</button>
               <button v-if="guests.length > 1" class="font-sans uppercase text-sm md:text-lg tracking-[0.1rem] md:tracking-[0.3rem] border-[0.25rem] border-black hover:bg-black hover:text-white transition-colors rounded-full px-5 py-1 h-fit whitespace-nowrap" @click.prevent="removeGuest">Remove Guest</button>
             </div>
             <button class="font-sans uppercase text-sm md:text-xl tracking-[0.1rem] md:tracking-[0.3rem] border-[0.25rem] border-black hover:bg-black hover:text-white transition-colors rounded-full px-5 py-1 h-fit whitespace-nowrap" type="submit">Finished</button>
@@ -36,10 +36,12 @@ import IntroHeader from '@components/IntroHeader.vue';
 import SlideIn from '@components/SlideIn.vue';
 import RsvpField from '@components/RsvpField.vue';
 import { title } from '@stores/introStore';
-import { changeTitle } from '@lib/utils';
+import { changeTitle, generateGuestArray, formatZodValidationError, validateGuests } from '@lib/utils';
 import { onMounted, onBeforeMount, ref } from 'vue';
 import type { Guest, GuestFormField, IndexedValidationError } from '@lib/types';
+import { guestSchema } from "@lib/schema/guestSchema";
 
+const guestFormData = ref<null | HTMLFormElement>(null);
 const showForm = ref(false);
 
 onBeforeMount(() => title.value = '');
@@ -65,16 +67,41 @@ const guests = ref<GuestFormField[]>([
 ]);
 
 const addGuest = () => {
-  guests.value.push({
-    index: guests.value.length + 1,
-    errors: {
-      first_name: '',
-      last_name: '',
-      email: '',
-      confirm_email: '',
-      dietary_requirements: ''
+  if (guestFormData.value !== null) {
+    const formData = new FormData(guestFormData.value);
+    const guestsFormatted: Guest[] = generateGuestArray(formData);
+    
+    const { validatedGuests, validationErrors } = validateGuests(guestsFormatted);
+
+    clearErrors();
+
+    if (validationErrors?.length > 0) {
+      validationErrors.forEach((error: IndexedValidationError) => {
+        const guestErrors: Guest = formatZodValidationError(error);
+        
+        guests.value[error.index] = { errors: guestErrors, index: error.index + 1 };
+      });
     }
-  });
+
+    const guestsWithErrors = guests.value.filter((guest) => {
+      return Object.values(guest.errors).some((error) => error.length > 0);
+    });
+
+    if (guestsWithErrors.length === 0) {
+      clearErrors();
+  
+      guests.value.push({
+        index: guests.value.length + 1,
+        errors: {
+          first_name: '',
+          last_name: '',
+          email: '',
+          confirm_email: '',
+          dietary_requirements: ''
+        }
+      });
+    }
+  }
 };
 
 const clearErrors = () => {
@@ -109,18 +136,7 @@ const submitForm = async (e: Event) => {
         const data = await response.json();
 
         data.forEach((guestError: IndexedValidationError) => {
-          const guestErrors: Guest = guestError.error.issues.reduce((acc, issue) => {
-            const path = issue.path[0] as keyof Guest;
-            acc[path] = issue.message;
-
-            return acc;
-          }, {
-            first_name: '',
-            last_name: '',
-            email: '',
-            confirm_email: '',
-            dietary_requirements: ''
-          });
+          const guestErrors: Guest = formatZodValidationError(guestError);
 
           guests.value[guestError.index] = { errors: guestErrors, index: guestError.index + 1 };
         });
