@@ -6,7 +6,7 @@ import { generateGuestArray } from "@lib/utils";
 import { guestSchema } from "@lib/schema/guestSchema";
 import { sendEmail } from "@lib/email/mailer";
 
-export const POST: APIRoute = async ({ request }) => {
+export const POST: APIRoute = async ({ request, redirect }) => {
   const formData = await request.formData();
 
   const guests: Guest[] = generateGuestArray(formData);
@@ -51,7 +51,7 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response("Something went wrong", { status: 500 });
   }
 
-  return new Response(null, { status: 200 });
+  return redirect('/home', 307);
 };
 
 export const GET: APIRoute = async () => {
