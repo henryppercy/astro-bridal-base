@@ -12,3 +12,9 @@
   font-style: normal;
   src: url('/fonts/fskimvar.woff2');
 }
+
+@font-face {
+  font-display: swap;
+  font-family: 'Ostrich Sans';
+  src: url('/fonts/Ostrich.woff') format('woff');
+}

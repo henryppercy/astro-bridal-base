@@ -19,7 +19,7 @@ module.exports = {
 			},
 			fontFamily: {
 				'sans': ['"Open Sans"',  ...defaultTheme.fontFamily.sans],
-				'serif': ['"FS Kim"', ...defaultTheme.fontFamily.serif],
+				'serif': ['"Ostrich Sans"', ...defaultTheme.fontFamily.serif],
 			}
 		}
 	},
