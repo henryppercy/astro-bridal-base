@@ -4,6 +4,8 @@ import { getFirestore } from "firebase-admin/firestore";
 import type { Guest, IndexedValidationError } from "@lib/types";
 import { generateGuestArray } from "@lib/utils";
 import { guestSchema } from "@lib/schema/guestSchema";
+import { sendEmail } from "@lib/email/emailer";
+
 
 export const POST: APIRoute = async ({ request, redirect }) => {
   const formData = await request.formData();
@@ -35,7 +37,17 @@ export const POST: APIRoute = async ({ request, redirect }) => {
   try {
     const db = getFirestore(app);
     const guestsRef = db.collection("guests");
-    await validatedGuests.forEach(async (guest) => await guestsRef.add(guest));
+
+    const addGuestsPromises = validatedGuests.map(guest => 
+      guestsRef.add(guest)
+    );
+    await Promise.all(addGuestsPromises);
+
+    const sendEmailPromises = validatedGuests.map(guest => 
+      sendEmail(guest.email, guest.first_name, guest.last_name)
+    );
+    await Promise.all(sendEmailPromises);
+
   } catch (error) {
     return new Response("Something went wrong", { status: 500 });
   }
