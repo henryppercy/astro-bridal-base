@@ -10,6 +10,5 @@
   font-display: swap;
   font-family: 'FS Kim';
   font-style: normal;
-  font-weight: 400;
-  src: url('/fonts/FSkimVar.woff2') format('woff2-variations');
+  src: url('/fonts/fskimvar.woff2');
 }
