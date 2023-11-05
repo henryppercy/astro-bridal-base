@@ -2,6 +2,7 @@ import type { ServiceAccount } from "firebase-admin";
 import { initializeApp, cert, getApps } from "firebase-admin/app";
 
 const activeApps = getApps();
+
 const serviceAccount = {
   type: "service_account",
   project_id: import.meta.env.FIREBASE_PROJECT_ID,
