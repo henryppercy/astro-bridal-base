@@ -1,4 +1,4 @@
-import type { Guest, IndexedValidationError } from '@lib/types';
+import type { Guest, IndexedValidationError, IndexedGuest } from '@lib/types';
 import { guestSchema } from "@lib/schema/guestSchema";
 
 import { 
@@ -35,14 +35,14 @@ export const generateGuestArray = (formData: FormData): Guest[] => {
 }
 
 export const validateGuests = (guests: Guest[]) => {
-  const validatedGuests: Guest[] = [];
+  const validatedGuests: IndexedGuest[] = [];
   const validationErrors: IndexedValidationError[] = [];
 
   for (const [index, guestData] of guests.entries()) {
     const validatedGuest = guestSchema.safeParse(guestData);
   
     if (validatedGuest.success) {
-      validatedGuests.push(validatedGuest.data);
+      validatedGuests.push({ index, guest: validatedGuest.data});
     } else {
       validationErrors.push({ index, error: validatedGuest.error });
     }
@@ -93,3 +93,20 @@ export const changeTitle = async (newTitle: string) => {
   await addCharacter(newTitle);
   updating.value = false;
 };
+
+export const createNewGuestField = (guestLen: number) => {
+  return {
+    index: guestLen,
+    errors: createEmptyGuest(),
+    data: createEmptyGuest(),
+    completed: false
+  };
+};
+
+export const createEmptyGuest = () => ({
+  first_name: '',
+  last_name: '',
+  email: '',
+  confirm_email: '',
+  dietary_requirements: ''
+});

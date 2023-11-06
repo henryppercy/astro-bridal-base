@@ -8,9 +8,13 @@
         <div class="space-y-16 pb-16 md:px-40 w-full">
           <template v-for="(guest, index) in guests" :key="index">
             <RsvpField 
-              :guest-no="index + 1" 
-              :errors="(guest.index === index + 1) ? guest.errors : { first_name: '', last_name: '', email: '', confirm_email: '', dietary_requirements: '' }"
+              v-if="!guest.completed"
+              :guest-no="index" 
+              :errors="(guest.index === index) ? guest.errors : { first_name: '', last_name: '', email: '', confirm_email: '', dietary_requirements: '' }"
+              :completed="guest.completed"
+              @updateGuest="handleUpdateGuest"
             />
+            <RsvpCompleteCard v-if="guest.completed" :guest="guest.data"/>
           </template>
           <div class="flex items-center justify-between flex-col max-md:gap-5 md:flex-row">
             <div class="space-x-4 max-md:flex max-md:justify-between w-full">
@@ -36,10 +40,10 @@ import IntroHeader from '@components/IntroHeader.vue';
 import SlideIn from '@components/SlideIn.vue';
 import RsvpField from '@components/RsvpField.vue';
 import { title } from '@stores/introStore';
-import { changeTitle, generateGuestArray, formatZodValidationError, validateGuests } from '@lib/utils';
+import { changeTitle, createNewGuestField, formatZodValidationError, validateGuests } from '@lib/utils';
 import { onMounted, onBeforeMount, ref } from 'vue';
-import type { Guest, GuestFormField, IndexedValidationError } from '@lib/types';
-import { guestSchema } from "@lib/schema/guestSchema";
+import type { Guest, GuestFormField, IndexedValidationError, IndexedGuest } from '@lib/types';
+import RsvpCompleteCard from './RsvpCompleteCard.vue';
 
 const guestFormData = ref<null | HTMLFormElement>(null);
 const showForm = ref(false);
@@ -50,59 +54,29 @@ onMounted(() => {
   setTimeout(async () => {
     await changeTitle('Nice, Just Need a Few More Details');
     showForm.value = true;
-  }, 1000);
+  }, 1);
 });
 
 const guests = ref<GuestFormField[]>([
   {
-    index: 1,
+    index: 0,
     errors: {
       first_name: '',
       last_name: '',
       email: '',
       confirm_email: '',
       dietary_requirements: ''
-    }
+    },
+    data: {
+      first_name: '',
+      last_name: '',
+      email: '',
+      confirm_email: '',
+      dietary_requirements: ''
+    },
+    completed: false
   }
 ]);
-
-const addGuest = () => {
-  if (guestFormData.value !== null) {
-    const formData = new FormData(guestFormData.value);
-    const guestsFormatted: Guest[] = generateGuestArray(formData);
-    
-    const { validatedGuests, validationErrors } = validateGuests(guestsFormatted);
-
-    clearErrors();
-
-    if (validationErrors?.length > 0) {
-      validationErrors.forEach((error: IndexedValidationError) => {
-        const guestErrors: Guest = formatZodValidationError(error);
-        
-        guests.value[error.index] = { errors: guestErrors, index: error.index + 1 };
-      });
-    }
-
-    const guestsWithErrors = guests.value.filter((guest) => {
-      return Object.values(guest.errors).some((error) => error.length > 0);
-    });
-
-    if (guestsWithErrors.length === 0) {
-      clearErrors();
-  
-      guests.value.push({
-        index: guests.value.length + 1,
-        errors: {
-          first_name: '',
-          last_name: '',
-          email: '',
-          confirm_email: '',
-          dietary_requirements: ''
-        }
-      });
-    }
-  }
-};
 
 const clearErrors = () => {
   guests.value.forEach((guest) => {
@@ -120,26 +94,56 @@ const removeGuest = () => {
   if (guests.value.length > 1) guests.value.pop();
 };
 
+const handleUpdateGuest = ([guestData, guestNumber]: [Guest, number]) => {
+  guests.value[guestNumber].data = guestData;
+}
+
+const addGuest = () => {
+  if (guestFormData.value !== null) {
+    const guestsFormatted: Guest[] = guests.value.map((guest) => guest.data);
+    const { validatedGuests, validationErrors } = validateGuests(guestsFormatted);
+
+    clearErrors();
+
+    if (validationErrors?.length > 0) {
+      validationErrors.forEach((error: IndexedValidationError) => {
+        const guestErrors: Guest = formatZodValidationError(error);
+        guests.value[error.index] = { errors: guestErrors, index: error.index, data: guestsFormatted[error.index], completed: false };
+      });
+    }
+
+    validatedGuests.forEach((guest: IndexedGuest) => {
+      guests.value[guest.index].data = guestsFormatted[guest.index];
+      guests.value[guest.index].completed = true;
+    });
+
+    const guestsWithErrors = guests.value.filter((guest) => Object.values(guest.errors).some((error) => error.length > 0));
+
+    if (guestsWithErrors.length === 0) {
+      clearErrors();
+      guests.value.push(createNewGuestField(guests.value.length));
+    }
+  }
+};
+
 const submitForm = async (e: Event) => {
   clearErrors();
 
-  const formData = new FormData(e.currentTarget as HTMLFormElement);
-
   try {
+    const guestsFormatted: Guest[] = guests.value.map((guest) => guest.data);
+
     const response = await fetch('/api/guests', {
       method: 'POST',
-      body: formData,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(guestsFormatted),
     });
 
     if (!response.ok) {
       if (response.status === 422) {
         const data = await response.json();
-
-        data.forEach((guestError: IndexedValidationError) => {
-          const guestErrors: Guest = formatZodValidationError(guestError);
-
-          guests.value[guestError.index] = { errors: guestErrors, index: guestError.index + 1 };
-        });
+        data.forEach((guestError: IndexedValidationError) => guests.value[guestError.index].errors = formatZodValidationError(guestError));
       }
     }
 
