@@ -2,6 +2,7 @@ import { ref } from 'vue';
 import type { Steps } from '@lib/types';
 
 export const title = ref('');
+export const mobileTitle = ref('');
 export const updating = ref(false);
 
 export const removeSentenceTime = 800;
@@ -50,7 +51,7 @@ export const steps: Steps = {
   },
   4: {
     step: 4,
-    title: 'No Problem, Come Back When You\'re Ready',
+    title: 'Come Back When You\'re Ready',
     param: 'come-back-when-youre-ready',
     buttons: [{ text: 'Okay I\'m Ready', nextStep: 3 }]
   },
