@@ -28,14 +28,14 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     );
     await Promise.all(addGuestsPromises);
 
-    // const sendEmailPromises = validatedGuests.map(validatedGuest => 
-    //   sendEmail(
-    //     validatedGuest.guest.email,
-    //     validatedGuest.guest.first_name,
-    //     validatedGuest.guest.last_name
-    //   )
-    // );
-    // await Promise.all(sendEmailPromises);
+    const sendEmailPromises = validatedGuests.map(validatedGuest => 
+      sendEmail(
+        validatedGuest.guest.email,
+        validatedGuest.guest.first_name,
+        validatedGuest.guest.last_name
+      )
+    );
+    await Promise.all(sendEmailPromises);
 
   } catch (error) {
     return new Response("Something went wrong", { status: 500 });

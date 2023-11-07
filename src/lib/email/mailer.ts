@@ -28,12 +28,12 @@ export const sendEmail = async (email: string, firstName: string, lastName: stri
             },
             To: [
               {
-                Email: email,
+                Email: senderEmail, // TODO: Replace with user email
                 Name: `${firstName} ${lastName}`
               }
             ],
+            TemplateID: import.meta.env.MAILJET_TEMPLATE_ID,
             Subject: `You are coming to ${senderName}'s wedding!`,
-            HTMLPart: `<h3>We are excited to see you at the wedding, ${firstName}!</h3>`,
             CustomID: "WeddingEmail"
           }
         ]
@@ -42,6 +42,5 @@ export const sendEmail = async (email: string, firstName: string, lastName: stri
     console.log(result.body);
   } catch (err) {
     console.error('Failed to send email', err);
-    throw err;
   }
 };
