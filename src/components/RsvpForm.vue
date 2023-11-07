@@ -4,19 +4,30 @@
   </IntroHeader>
   <IntroMain>
     <SlideIn>
-      <form v-if="showForm" @submit.prevent="submitForm" class="flex flex-col md:flex-row gap-5">
+      <form ref="guestFormData" v-if="showForm" @submit.prevent="submitForm" class="flex flex-col md:flex-row gap-5">
         <div class="space-y-16 pb-16 md:px-40 w-full">
           <template v-for="(guest, index) in guests" :key="index">
             <RsvpField 
-              :guest-no="index + 1" 
-              :errors="(guest.index === index + 1) ? guest.errors : { first_name: '', last_name: '', email: '', confirm_email: '', dietary_requirements: '' }"
+              v-if="!guest.completed"
+              :guest-no="index"
+              :guest="guest.data"
+              :errors="(guest.index === index) ? guest.errors : { first_name: '', last_name: '', email: '', confirm_email: '', dietary_requirements: '' }"
+              :completed="guest.completed"
+              @updateGuest="handleUpdateGuest"
+              @saveGuest="handleSaveGuest"
+              @removeGuest="handleDeleteGuest"
+            />
+            <RsvpCompleteCard 
+              v-if="guest.completed"
+              :guest="guest.data"
+              :guest-no="index"
+              :only-guest="guests.length === 1"
+              @deleteGuest="handleDeleteGuest"
+              @editGuest="handleEditGuest"
             />
           </template>
-          <div class="flex items-center justify-between flex-col max-md:gap-5 md:flex-row">
-            <div class="space-x-4 max-md:flex max-md:justify-between w-full">
-              <button class="font-sans uppercase text-sm md:text-lg tracking-[0.1rem] md:tracking-[0.3rem] border-[0.25rem] border-black hover:bg-black hover:text-white transition-colors rounded-full px-5 py-1 h-fit whitespace-nowrap" @click.prevent="addGuest">New Guest</button>
-              <button v-if="guests.length > 1" class="font-sans uppercase text-sm md:text-lg tracking-[0.1rem] md:tracking-[0.3rem] border-[0.25rem] border-black hover:bg-black hover:text-white transition-colors rounded-full px-5 py-1 h-fit whitespace-nowrap" @click.prevent="removeGuest">Remove Guest</button>
-            </div>
+          <div v-if="guestsCompleted" class="flex items-center justify-between flex-col max-md:gap-5 md:flex-row">
+            <button class="font-sans uppercase text-sm md:text-lg tracking-[0.1rem] md:tracking-[0.3rem] border-[0.25rem] border-black hover:bg-black hover:text-white transition-colors rounded-full px-5 py-1 h-fit whitespace-nowrap" @click.prevent="addGuest" >New Guest</button>
             <button class="font-sans uppercase text-sm md:text-xl tracking-[0.1rem] md:tracking-[0.3rem] border-[0.25rem] border-black hover:bg-black hover:text-white transition-colors rounded-full px-5 py-1 h-fit whitespace-nowrap" type="submit">Finished</button>
           </div>
         </div>
@@ -36,11 +47,10 @@ import IntroHeader from '@components/IntroHeader.vue';
 import SlideIn from '@components/SlideIn.vue';
 import RsvpField from '@components/RsvpField.vue';
 import { title } from '@stores/introStore';
-import { changeTitle } from '@lib/utils';
-import { onMounted, onBeforeMount, ref } from 'vue';
-import type { Guest, GuestFormField, IndexedValidationError } from '@lib/types';
-
-const showForm = ref(false);
+import { changeTitle, createNewGuestField, formatZodValidationError, validateGuests } from '@lib/utils';
+import { onMounted, onBeforeMount, ref, computed } from 'vue';
+import type { Guest, GuestFormField, IndexedValidationError, IndexedGuest } from '@lib/types';
+import RsvpCompleteCard from './RsvpCompleteCard.vue';
 
 onBeforeMount(() => title.value = '');
 
@@ -48,34 +58,33 @@ onMounted(() => {
   setTimeout(async () => {
     await changeTitle('Nice, Just Need a Few More Details');
     showForm.value = true;
-  }, 1000);
+  }, 1);
 });
 
 const guests = ref<GuestFormField[]>([
   {
-    index: 1,
+    index: 0,
     errors: {
       first_name: '',
       last_name: '',
       email: '',
       confirm_email: '',
       dietary_requirements: ''
-    }
+    },
+    data: {
+      first_name: '',
+      last_name: '',
+      email: '',
+      confirm_email: '',
+      dietary_requirements: ''
+    },
+    completed: false
   }
 ]);
 
-const addGuest = () => {
-  guests.value.push({
-    index: guests.value.length + 1,
-    errors: {
-      first_name: '',
-      last_name: '',
-      email: '',
-      confirm_email: '',
-      dietary_requirements: ''
-    }
-  });
-};
+const guestFormData = ref<null | HTMLFormElement>(null);
+const showForm = ref(false);
+const guestsCompleted = computed(() => guests.value.every((guest) => guest.completed));
 
 const clearErrors = () => {
   guests.value.forEach((guest) => {
@@ -89,41 +98,93 @@ const clearErrors = () => {
   });
 };
 
+const clearGuestError = (guestNumber: number) => {
+  guests.value[guestNumber].errors = {
+    first_name: '',
+    last_name: '',
+    email: '',
+    confirm_email: '',
+    dietary_requirements: ''
+  };
+};
+
 const removeGuest = () => {
   if (guests.value.length > 1) guests.value.pop();
+};
+
+const handleUpdateGuest = ([guestData, guestNumber]: [Guest, number]) => {
+  guests.value[guestNumber].data = guestData;
+}
+
+const handleDeleteGuest = (guestNumber: number) => {
+  guests.value.splice(guestNumber, 1);
+}
+
+const handleEditGuest = (guestNumber: number) => {
+  guests.value[guestNumber].completed = false;
+}
+
+const handleSaveGuest = (guestNumber: number) => {
+  const { validatedGuests, validationErrors } = validateGuests([guests.value[guestNumber].data]);
+  
+  clearGuestError(guestNumber);
+  
+  if (validationErrors?.length > 0) {
+    validationErrors.forEach((error: IndexedValidationError) => {
+      const guestErrors: Guest = formatZodValidationError(error);
+      guests.value[error.index].errors = guestErrors;
+    });
+  } else {
+      guests.value[guestNumber].completed = true;
+  }
+}
+
+const addGuest = () => {
+  if (guestFormData.value !== null) {
+    const guestsFormatted: Guest[] = guests.value.map((guest) => guest.data);
+    const { validatedGuests, validationErrors } = validateGuests(guestsFormatted);
+
+    clearErrors();
+
+    if (validationErrors?.length > 0) {
+      validationErrors.forEach((error: IndexedValidationError) => {
+        const guestErrors: Guest = formatZodValidationError(error);
+        guests.value[error.index] = { errors: guestErrors, index: error.index, data: guestsFormatted[error.index], completed: false };
+      });
+    }
+
+    validatedGuests.forEach((guest: IndexedGuest) => {
+      guests.value[guest.index].data = guestsFormatted[guest.index];
+      guests.value[guest.index].completed = true;
+    });
+
+    const guestsWithErrors = guests.value.filter((guest) => Object.values(guest.errors).some((error) => error.length > 0));
+
+    if (guestsWithErrors.length === 0) {
+      clearErrors();
+      guests.value.push(createNewGuestField(guests.value.length));
+    }
+  }
 };
 
 const submitForm = async (e: Event) => {
   clearErrors();
 
-  const formData = new FormData(e.currentTarget as HTMLFormElement);
-
   try {
+    const guestsFormatted: Guest[] = guests.value.map((guest) => guest.data);
+
     const response = await fetch('/api/guests', {
       method: 'POST',
-      body: formData,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(guestsFormatted),
     });
 
     if (!response.ok) {
       if (response.status === 422) {
         const data = await response.json();
-
-        data.forEach((guestError: IndexedValidationError) => {
-          const guestErrors: Guest = guestError.error.issues.reduce((acc, issue) => {
-            const path = issue.path[0] as keyof Guest;
-            acc[path] = issue.message;
-
-            return acc;
-          }, {
-            first_name: '',
-            last_name: '',
-            email: '',
-            confirm_email: '',
-            dietary_requirements: ''
-          });
-
-          guests.value[guestError.index] = { errors: guestErrors, index: guestError.index + 1 };
-        });
+        data.forEach((guestError: IndexedValidationError) => guests.value[guestError.index].errors = formatZodValidationError(guestError));
       }
     }
 

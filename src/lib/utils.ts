@@ -1,4 +1,6 @@
-import type { Guest } from '@lib/types';
+import type { Guest, IndexedValidationError, IndexedGuest } from '@lib/types';
+import { guestSchema } from "@lib/schema/guestSchema";
+
 import { 
   title, updating, addLetterTime, delayBeforeTypingIn, 
   longTitleLength, removeLetterTimeFast, removeLetterTimeSlow, 
@@ -32,6 +34,38 @@ export const generateGuestArray = (formData: FormData): Guest[] => {
   return guests;
 }
 
+export const validateGuests = (guests: Guest[]) => {
+  const validatedGuests: IndexedGuest[] = [];
+  const validationErrors: IndexedValidationError[] = [];
+
+  for (const [index, guestData] of guests.entries()) {
+    const validatedGuest = guestSchema.safeParse(guestData);
+  
+    if (validatedGuest.success) {
+      validatedGuests.push({ index, guest: validatedGuest.data});
+    } else {
+      validationErrors.push({ index, error: validatedGuest.error });
+    }
+  }
+
+  return { validatedGuests, validationErrors };
+}
+
+export const formatZodValidationError = (error: IndexedValidationError) => {
+  return error.error.issues.reduce((acc, issue) => {
+    const path = issue.path[0] as keyof Guest;
+    acc[path] = issue.message;
+
+    return acc;
+  }, {
+    first_name: '',
+    last_name: '',
+    email: '',
+    confirm_email: '',
+    dietary_requirements: ''
+  });
+}
+
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export const removeCharacter = async () => {
@@ -59,3 +93,20 @@ export const changeTitle = async (newTitle: string) => {
   await addCharacter(newTitle);
   updating.value = false;
 };
+
+export const createNewGuestField = (guestLen: number) => {
+  return {
+    index: guestLen,
+    errors: createEmptyGuest(),
+    data: createEmptyGuest(),
+    completed: false
+  };
+};
+
+export const createEmptyGuest = () => ({
+  first_name: '',
+  last_name: '',
+  email: '',
+  confirm_email: '',
+  dietary_requirements: ''
+});
