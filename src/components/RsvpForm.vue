@@ -28,14 +28,17 @@
               :guest="guest.data"
               :guest-no="index"
               :only-guest="guests.length === 1"
+              :request-pending="requestPending"
               @deleteGuest="handleDeleteGuest"
               @editGuest="handleEditGuest"
             />
           </template>
-          <div v-if="guestsCompleted" class="flex items-center justify-between flex-col gap-5 md:flex-row">
-            <AppButton class="font-sans uppercase text-sm md:text-lg tracking-[0.1rem] md:tracking-[0.3rem] border-[0.25rem] border-black hover:bg-black hover:text-white transition-colors rounded-full px-5 py-1 h-fit whitespace-nowrap" @click.prevent="addGuest">Add Guest</AppButton>
-            <AppButton class="font-sans uppercase text-sm md:text-xl tracking-[0.1rem] md:tracking-[0.3rem] border-[0.25rem] border-black hover:bg-black hover:text-white transition-colors rounded-full px-5 py-1 h-fit whitespace-nowrap" type="submit">Finished</AppButton>
-          </div>
+          <SlideIn>
+            <div v-if="guestsCompleted && !requestPending" class="flex items-center justify-between flex-col gap-5 md:flex-row">
+              <AppButton class="font-sans uppercase text-sm md:text-lg tracking-[0.1rem] md:tracking-[0.3rem] border-[0.25rem] border-black hover:bg-black hover:text-white transition-colors rounded-full px-5 py-1 h-fit whitespace-nowrap" @click.prevent="addGuest">Add Guest</AppButton>
+              <AppButton class="font-sans uppercase text-sm md:text-xl tracking-[0.1rem] md:tracking-[0.3rem] border-[0.25rem] border-black hover:bg-black hover:text-white transition-colors rounded-full px-5 py-1 h-fit whitespace-nowrap" type="submit">Finished</AppButton>
+            </div>
+          </SlideIn>
         </div>
       </form>
     </SlideIn>
@@ -96,6 +99,7 @@ const guests = ref<GuestFormField[]>([
 
 const guestFormData = ref<null | HTMLFormElement>(null);
 const showForm = ref(false);
+const requestPending = ref(false);
 const guestsCompleted = computed(() => guests.value.every((guest) => guest.completed));
 
 const clearErrors = () => {
@@ -177,6 +181,7 @@ const addGuest = () => {
 };
 
 const submitForm = async (e: Event) => {
+  requestPending.value = true;
   clearErrors();
 
   try {
@@ -194,11 +199,13 @@ const submitForm = async (e: Event) => {
       if (response.status === 422) {
         const data = await response.json();
         data.forEach((guestError: IndexedValidationError) => guests.value[guestError.index].errors = formatZodValidationError(guestError));
+        requestPending.value = false;
       }
     }
 
     if (response.ok) {
       showForm.value = false;
+      requestPending.value = false;
       console.log('Successfully submitted');
     }
   } catch (error) {
