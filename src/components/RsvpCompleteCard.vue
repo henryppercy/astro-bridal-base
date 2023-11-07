@@ -1,13 +1,13 @@
 <template>
-  <div class="bg-pink rounded-xl px-10 py-5 flex justify-between">
+  <div class="bg-pink rounded-3xl py-4 px-6 md:px-10 md:py-5 flex flex-col md:flex-row justify-between max-md:gap-4">
     <div>
-      <h2 class="uppercase text-white tracking-widest text-lg">{{ guest.first_name }} {{ guest.last_name }}</h2>
-      <p class="uppercase text-white tracking-widest text-lg">{{  guest.email }}</p>
-      <p class="uppercase text-white tracking-widest text-lg">{{ guest.dietary_requirements ? guest.dietary_requirements : 'No Dietary Requirements' }}</p>
+      <h2 class="uppercase text-white tracking-widest md:text-lg">{{ guest.first_name }} {{ guest.last_name }}</h2>
+      <p class="uppercase text-white tracking-widest md:text-lg">{{  guest.email }}</p>
+      <p class="uppercase text-white tracking-widest md:text-lg">{{ guest.dietary_requirements ? guest.dietary_requirements : 'No Dietary Requirements' }}</p>
     </div>
-    <div class="space-x-4">
-      <button v-if="!onlyGuest" @click.prevent="deleteGuest" class="rounded-full bg-white text-pink px-5 py-1 uppercase tracking-[0.1rem] hover:text-white hover:bg-pink hover:ring-2 hover:ring-white">Delete</button>
-      <button @click.prevent="editGuest" class="rounded-full bg-white text-pink px-5 py-1 uppercase tracking-[0.1rem] hover:text-white hover:bg-pink hover:ring-2 hover:ring-white">Edit</button>
+    <div class="flex gap-4 md:h-10">
+      <button v-if="!onlyGuest" @click.prevent="deleteGuest" class="rounded-full bg-white text-pink px-5 py-1 uppercase tracking-[0.1rem] hover:text-white hover:bg-pink hover:ring-2 hover:ring-white w-1/2 md:w-fit">Delete</button>
+      <button @click.prevent="editGuest" class="rounded-full bg-white text-pink px-5 py-1 uppercase tracking-[0.1rem] hover:text-white hover:bg-pink hover:ring-2 hover:ring-white w-1/2 md:w-fit">Edit</button>
     </div>
   </div>
 </template>
