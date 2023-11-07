@@ -8,10 +8,11 @@ export type Guest = {
   dietary_requirements?: string;
 };
 
-
 export type GuestFormField = {
   index: number;
   errors: Guest
+  data: Guest;
+  completed: boolean;
 }
 
 export type Step = {
@@ -31,4 +32,9 @@ export type Steps = {
 export type IndexedValidationError = {
   index: number;
   error: ZodError;
+};
+
+export type IndexedGuest = {
+  index: number;
+  guest: Guest;
 };

@@ -3,21 +3,23 @@
     {{ title }}
   </IntroHeader>
   <main class="h-1/2">
-    <IntroMain class="gap-10 flex items-start justify-evenly flex-wrap">
+    <IntroMain class="gap-4 md:gap-10 flex items-start justify-evenly flex-wrap">
       <SlideIn>
-        <div v-for="button in step.buttons" :key="button.text">
+        <div class="max-md:w-full" v-for="button in step.buttons" :key="button.text">
           <AppButton @click="button.nextStep === 6 ? navigateToForm() : changeStep(steps[button.nextStep].title, button.nextStep)" :disabled="updating">
             {{ button.text }}
           </AppButton>
         </div>
       </SlideIn>
     </IntroMain>
-    <nav class="fixed flex right-6 bottom-6">
-      <ul class="flex gap-5 md:gap-8">
-        <li v-if="stepHistory.length" @click.prevent="handleBackNavigation" class="font-sans uppercase text-xs tracking-[0.3rem] border-[0.2rem] border-white hover:text-black transition-colors rounded-full py-1 cursor-pointer" :disabled="updating" :class="{ 'cursor-not-allowed' : updating}">
+    <nav class="fixed flex bottom-0 w-full px-10 py-8 md:px-16 md:py-10">
+      <ul class="flex gap-5 md:gap-8 w-full" :class="stepHistory.length ? 'justify-between' : 'justify-end'">
+        <li v-if="stepHistory.length" @click.prevent="handleBackNavigation" class="font-sans font-semibold uppercase text-xs tracking-[0.3rem] border-[0.2rem] border-white hover:text-black transition-colors rounded-full cursor-pointer" :disabled="updating" :class="{ 'cursor-not-allowed' : updating}">
           Back
         </li>
-        <li class="font-sans uppercase text-xs tracking-[0.3rem] border-[0.2rem] border-white hover:text-black transition-colors rounded-full px-5 py-1"><a href="/help">Help</a></li>
+        <li class="font-sans uppercase text-xs tracking-[0.3rem] border-[0.2rem] border-white hover:text-black transition-colors rounded-full"><a href="/help">
+          Help
+        </a></li>
       </ul>
     </nav>
   </main>

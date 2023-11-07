@@ -1,28 +1,14 @@
 import type { APIRoute } from "astro";
 import { app } from "@firebase/server";
 import { getFirestore } from "firebase-admin/firestore";
-import type { Guest, IndexedValidationError } from "@lib/types";
-import { generateGuestArray } from "@lib/utils";
-import { guestSchema } from "@lib/schema/guestSchema";
+import type { Guest } from "@lib/types";
+import { validateGuests } from "@lib/utils";
 import { sendEmail } from "@lib/email/mailer";
 
-export const POST: APIRoute = async ({ request }) => {
-  const formData = await request.formData();
+export const POST: APIRoute = async ({ request, redirect }) => {
+  const guests: Guest[] = await request.json();
 
-  const guests: Guest[] = generateGuestArray(formData);
-
-  const validatedGuests: Guest[] = [];
-  const validationErrors: IndexedValidationError[] = [];
-
-  for (const [index, guestData] of guests.entries()) {
-    const validatedGuest = guestSchema.safeParse(guestData);
-  
-    if (validatedGuest.success) {
-      validatedGuests.push(validatedGuest.data);
-    } else {
-      validationErrors.push({ index, error: validatedGuest.error });
-    }
-  }
+  const { validatedGuests, validationErrors } = validateGuests(guests);
 
   if (validationErrors.length > 0) {
     return new Response(JSON.stringify(validationErrors), {
@@ -38,12 +24,16 @@ export const POST: APIRoute = async ({ request }) => {
     const guestsRef = db.collection("guests");
 
     const addGuestsPromises = validatedGuests.map(guest => 
-      guestsRef.add(guest)
+      guestsRef.add(guest.guest)
     );
     await Promise.all(addGuestsPromises);
 
-    const sendEmailPromises = validatedGuests.map(guest => 
-      sendEmail(guest.email, guest.first_name, guest.last_name)
+    const sendEmailPromises = validatedGuests.map(validatedGuest => 
+      sendEmail(
+        validatedGuest.guest.email,
+        validatedGuest.guest.first_name,
+        validatedGuest.guest.last_name
+      )
     );
     await Promise.all(sendEmailPromises);
 
@@ -51,7 +41,7 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response("Something went wrong", { status: 500 });
   }
 
-  return new Response(null, { status: 200 });
+  return redirect('/home', 307);
 };
 
 export const GET: APIRoute = async () => {
