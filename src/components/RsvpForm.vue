@@ -9,18 +9,25 @@
           <template v-for="(guest, index) in guests" :key="index">
             <RsvpField 
               v-if="!guest.completed"
-              :guest-no="index" 
+              :guest-no="index"
+              :guest="guest.data"
               :errors="(guest.index === index) ? guest.errors : { first_name: '', last_name: '', email: '', confirm_email: '', dietary_requirements: '' }"
               :completed="guest.completed"
               @updateGuest="handleUpdateGuest"
+              @saveGuest="handleSaveGuest"
+              @removeGuest="handleDeleteGuest"
             />
-            <RsvpCompleteCard v-if="guest.completed" :guest="guest.data"/>
+            <RsvpCompleteCard 
+              v-if="guest.completed"
+              :guest="guest.data"
+              :guest-no="index"
+              :only-guest="guests.length === 1"
+              @deleteGuest="handleDeleteGuest"
+              @editGuest="handleEditGuest"
+            />
           </template>
-          <div class="flex items-center justify-between flex-col max-md:gap-5 md:flex-row">
-            <div class="space-x-4 max-md:flex max-md:justify-between w-full">
-              <button class="font-sans uppercase text-sm md:text-lg tracking-[0.1rem] md:tracking-[0.3rem] border-[0.25rem] border-black hover:bg-black hover:text-white transition-colors rounded-full px-5 py-1 h-fit whitespace-nowrap" @click.prevent="addGuest" >New Guest</button>
-              <button v-if="guests.length > 1" class="font-sans uppercase text-sm md:text-lg tracking-[0.1rem] md:tracking-[0.3rem] border-[0.25rem] border-black hover:bg-black hover:text-white transition-colors rounded-full px-5 py-1 h-fit whitespace-nowrap" @click.prevent="removeGuest">Remove Guest</button>
-            </div>
+          <div v-if="guestsCompleted" class="flex items-center justify-between flex-col max-md:gap-5 md:flex-row">
+            <button class="font-sans uppercase text-sm md:text-lg tracking-[0.1rem] md:tracking-[0.3rem] border-[0.25rem] border-black hover:bg-black hover:text-white transition-colors rounded-full px-5 py-1 h-fit whitespace-nowrap" @click.prevent="addGuest" >New Guest</button>
             <button class="font-sans uppercase text-sm md:text-xl tracking-[0.1rem] md:tracking-[0.3rem] border-[0.25rem] border-black hover:bg-black hover:text-white transition-colors rounded-full px-5 py-1 h-fit whitespace-nowrap" type="submit">Finished</button>
           </div>
         </div>
@@ -41,12 +48,9 @@ import SlideIn from '@components/SlideIn.vue';
 import RsvpField from '@components/RsvpField.vue';
 import { title } from '@stores/introStore';
 import { changeTitle, createNewGuestField, formatZodValidationError, validateGuests } from '@lib/utils';
-import { onMounted, onBeforeMount, ref } from 'vue';
+import { onMounted, onBeforeMount, ref, computed } from 'vue';
 import type { Guest, GuestFormField, IndexedValidationError, IndexedGuest } from '@lib/types';
 import RsvpCompleteCard from './RsvpCompleteCard.vue';
-
-const guestFormData = ref<null | HTMLFormElement>(null);
-const showForm = ref(false);
 
 onBeforeMount(() => title.value = '');
 
@@ -78,6 +82,10 @@ const guests = ref<GuestFormField[]>([
   }
 ]);
 
+const guestFormData = ref<null | HTMLFormElement>(null);
+const showForm = ref(false);
+const guestsCompleted = computed(() => guests.value.every((guest) => guest.completed));
+
 const clearErrors = () => {
   guests.value.forEach((guest) => {
     guest.errors = {
@@ -90,12 +98,45 @@ const clearErrors = () => {
   });
 };
 
+const clearGuestError = (guestNumber: number) => {
+  guests.value[guestNumber].errors = {
+    first_name: '',
+    last_name: '',
+    email: '',
+    confirm_email: '',
+    dietary_requirements: ''
+  };
+};
+
 const removeGuest = () => {
   if (guests.value.length > 1) guests.value.pop();
 };
 
 const handleUpdateGuest = ([guestData, guestNumber]: [Guest, number]) => {
   guests.value[guestNumber].data = guestData;
+}
+
+const handleDeleteGuest = (guestNumber: number) => {
+  guests.value.splice(guestNumber, 1);
+}
+
+const handleEditGuest = (guestNumber: number) => {
+  guests.value[guestNumber].completed = false;
+}
+
+const handleSaveGuest = (guestNumber: number) => {
+  const { validatedGuests, validationErrors } = validateGuests([guests.value[guestNumber].data]);
+  
+  clearGuestError(guestNumber);
+  
+  if (validationErrors?.length > 0) {
+    validationErrors.forEach((error: IndexedValidationError) => {
+      const guestErrors: Guest = formatZodValidationError(error);
+      guests.value[error.index].errors = guestErrors;
+    });
+  } else {
+      guests.value[guestNumber].completed = true;
+  }
 }
 
 const addGuest = () => {

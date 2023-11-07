@@ -18,6 +18,10 @@
           <input v-model="guest.confirm_email" @input="handleInput('confirm_email')" :class="{ '!bg-pink !text-white': guest.confirm_email !== '' }" class="placeholder-white-light border-white-light focus:outline-none focus:border-black border-[0.25rem] rounded-full bg-white w-full h-10 px-4 uppercase" type="email" :id="`confirm_email_${guestNo}`" :name="`confirm_email_${guestNo}`" placeholder="Confirm Email" required/>
           <p class="text-rose-600 text-xs pl-2 mt-1 absolute">{{errors.confirm_email}}</p>
         </div>
+        <div class="flex justify-between">
+          <button @click="saveGuest" class="rounded-full bg-white text-black px-5 py-1 uppercase tracking-[0.1rem] border-[0.25rem] border-black hover:text-white hover:bg-black transition-colors">Save</button>
+          <button v-if="guestNo >= 1" @click="removeGuest" class="rounded-full bg-white text-black px-5 py-1 uppercase tracking-[0.1rem] border-[0.25rem] border-black hover:text-white hover:bg-black transition-colors">Remove</button>
+        </div>
       </div>
       <div class="flex flex-col w-full">
         <textarea v-model="guest.dietary_requirements" @input="handleInput('dietary_requirements')" :class="{ '!bg-pink !text-white': guest.dietary_requirements !== '' }" class="placeholder-white-light border-white-light focus:outline-none focus:border-black border-[0.25rem] rounded-xl bg-white !w-full px-4 pt-3 uppercase md:w-1/2 h-full" :id="`dietary_requirements_${guestNo}`" :name="`dietary_requirements_${guestNo}`" placeholder="Dietary Requirements"></textarea>
@@ -31,24 +35,25 @@
 import type { Guest } from '@lib/types';
 import { ref } from 'vue';
 
-const emit = defineEmits(['updateGuest']);
+const emit = defineEmits(['updateGuest', 'saveGuest', 'removeGuest']);
 
 const props = defineProps<{
   guestNo: number, 
   errors: Guest,
-  completed: boolean
+  completed: boolean,
+  guest: Guest
 }>();
 
-const guest = ref<Guest>({
-  first_name: '',
-  last_name: '',
-  email: '',
-  confirm_email: '',
-  dietary_requirements: ''
-});
-
 const updateGuestInput = () => {
-  emit('updateGuest', [guest.value, props.guestNo]);
+  emit('updateGuest', [props.guest, props.guestNo]);
+}
+
+const saveGuest = () => {
+  emit('saveGuest', props.guestNo);
+}
+
+const removeGuest = () => {
+  emit('removeGuest', props.guestNo);
 }
 
 const handleInput = (field: keyof Guest) => {
