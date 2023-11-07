@@ -34,8 +34,8 @@ export const steps: Steps = {
     title: 'Harriet & George Are Tying the Knot',
     param: 'tying-the-Knot',
     buttons: [
-      { text: 'Okay', nextStep: 3 },
-      { text: 'Finally, It\'s About Time He Asked', nextStep: 3 }
+      { text: 'Finally, It\'s About Time He Asked', nextStep: 3 },
+      { text: 'Okay', nextStep: 3 }
     ]
   },
   3: {
