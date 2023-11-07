@@ -1,5 +1,6 @@
 const senderEmail = import.meta.env.SENDER_EMAIL_ADDRESS;
 const senderName = import.meta.env.SENDER_EMAIL_NAME;
+const TemplateID = Number(import.meta.env.MAILJET_TEMPLATE_ID);
 
 const mailjetPromise = import('node-mailjet')
   .then(mailjetModule => {
@@ -32,7 +33,7 @@ export const sendEmail = async (email: string, firstName: string, lastName: stri
                 Name: `${firstName} ${lastName}`
               }
             ],
-            TemplateID: import.meta.env.MAILJET_TEMPLATE_ID,
+            TemplateID: TemplateID,
             Subject: `You are coming to ${senderName}'s wedding!`,
             CustomID: "WeddingEmail"
           }

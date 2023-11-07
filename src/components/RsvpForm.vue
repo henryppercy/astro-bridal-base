@@ -1,18 +1,24 @@
 <template>
-  <IntroHeader>
-    {{ title }}
+  <IntroHeader class="max-md:hidden">
+    <span>{{ title }}</span>
   </IntroHeader>
+  <header class="md:hidden flex items-end justify-center px-8 md:px-12">
+    <h1 class="font-serif uppercase text-[4.5rem] text-pink text-center tracking-tighter leading-[0.8] w-fit pt-12 pb-2">
+      {{ mobileTitle }}
+    </h1>
+  </header> 
   <IntroMain>
     <SlideIn>
-      <form ref="guestFormData" v-if="showForm" @submit.prevent="submitForm" class="flex flex-col md:flex-row gap-5">
-        <div class="space-y-16 pb-16 md:px-40 w-full">
+      <form ref="guestFormData" v-if="showForm" @submit.prevent="submitForm" class="flex flex-col md:flex-row gap-5 pb-8 md:pb-20">
+        <div class="space-y-4 md:space-y-8 pb-16 w-full">
           <template v-for="(guest, index) in guests" :key="index">
             <RsvpField 
               v-if="!guest.completed"
               :guest-no="index"
               :guest="guest.data"
-              :errors="(guest.index === index) ? guest.errors : { first_name: '', last_name: '', email: '', confirm_email: '', dietary_requirements: '' }"
+              :errors="guest.errors"
               :completed="guest.completed"
+              :only-guest="guests.length === 1"
               @updateGuest="handleUpdateGuest"
               @saveGuest="handleSaveGuest"
               @removeGuest="handleDeleteGuest"
@@ -26,17 +32,21 @@
               @editGuest="handleEditGuest"
             />
           </template>
-          <div v-if="guestsCompleted" class="flex items-center justify-between flex-col max-md:gap-5 md:flex-row">
-            <button class="font-sans uppercase text-sm md:text-lg tracking-[0.1rem] md:tracking-[0.3rem] border-[0.25rem] border-black hover:bg-black hover:text-white transition-colors rounded-full px-5 py-1 h-fit whitespace-nowrap" @click.prevent="addGuest" >New Guest</button>
-            <button class="font-sans uppercase text-sm md:text-xl tracking-[0.1rem] md:tracking-[0.3rem] border-[0.25rem] border-black hover:bg-black hover:text-white transition-colors rounded-full px-5 py-1 h-fit whitespace-nowrap" type="submit">Finished</button>
+          <div v-if="guestsCompleted" class="flex items-center justify-between flex-col gap-5 md:flex-row">
+            <AppButton class="font-sans uppercase text-sm md:text-lg tracking-[0.1rem] md:tracking-[0.3rem] border-[0.25rem] border-black hover:bg-black hover:text-white transition-colors rounded-full px-5 py-1 h-fit whitespace-nowrap" @click.prevent="addGuest">Add Guest</AppButton>
+            <AppButton class="font-sans uppercase text-sm md:text-xl tracking-[0.1rem] md:tracking-[0.3rem] border-[0.25rem] border-black hover:bg-black hover:text-white transition-colors rounded-full px-5 py-1 h-fit whitespace-nowrap" type="submit">Finished</AppButton>
           </div>
         </div>
       </form>
     </SlideIn>
   </IntroMain>
-  <nav class="fixed flex right-6 bottom-0 max-md:bg-white w-full h-10">
-    <ul class="flex items-center justify-end gap-5 md:gap-8 w-full">
-      <li class="font-sans uppercase text-xs tracking-[0.3rem] border-[0.2rem] border-white hover:text-black transition-colors rounded-full px-5 py-1"><a href="/help">Help</a></li>
+  <nav class="fixed flex bottom-0 w-full px-5 py-4 md:px-16 md:py-10 bg-white">
+    <ul class="flex gap-5 md:gap-8 w-full justify-end">
+      <li class="font-sans uppercase text-xs tracking-[0.3rem] border-[0.2rem] border-white hover:text-black transition-colors rounded-full">
+        <a href="/help">
+          Help
+        </a>
+      </li>
     </ul>
   </nav>
 </template>
@@ -46,17 +56,19 @@ import IntroMain from './IntroMain.vue';
 import IntroHeader from '@components/IntroHeader.vue';
 import SlideIn from '@components/SlideIn.vue';
 import RsvpField from '@components/RsvpField.vue';
-import { title } from '@stores/introStore';
-import { changeTitle, createNewGuestField, formatZodValidationError, validateGuests } from '@lib/utils';
+import { title, mobileTitle } from '@stores/introStore';
+import { changeTitle, changeMobileTitle, createNewGuestField, formatZodValidationError, validateGuests } from '@lib/utils';
 import { onMounted, onBeforeMount, ref, computed } from 'vue';
 import type { Guest, GuestFormField, IndexedValidationError, IndexedGuest } from '@lib/types';
 import RsvpCompleteCard from './RsvpCompleteCard.vue';
+import AppButton from './AppButton.vue';
 
 onBeforeMount(() => title.value = '');
 
 onMounted(() => {
   setTimeout(async () => {
-    await changeTitle('Nice, Just Need a Few More Details');
+    await changeMobileTitle('Details')
+    changeTitle('Nice, Just Need a Few More Details');
     showForm.value = true;
   }, 1);
 });
@@ -108,10 +120,6 @@ const clearGuestError = (guestNumber: number) => {
   };
 };
 
-const removeGuest = () => {
-  if (guests.value.length > 1) guests.value.pop();
-};
-
 const handleUpdateGuest = ([guestData, guestNumber]: [Guest, number]) => {
   guests.value[guestNumber].data = guestData;
 }
@@ -132,7 +140,8 @@ const handleSaveGuest = (guestNumber: number) => {
   if (validationErrors?.length > 0) {
     validationErrors.forEach((error: IndexedValidationError) => {
       const guestErrors: Guest = formatZodValidationError(error);
-      guests.value[error.index].errors = guestErrors;
+      guests.value
+      guests.value[guestNumber].errors = guestErrors;
     });
   } else {
       guests.value[guestNumber].completed = true;
