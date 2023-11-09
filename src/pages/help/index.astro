@@ -1,16 +1,28 @@
 ---
-import DefaultLayout from '@layouts/DefaultLayout.astro';
+import StaticLayout from '@layouts/StaticLayout.astro';
 ---
 
-<DefaultLayout title="Help">
-  <header class="h-1/2 flex items-end justify-center pb-3">
-    <h1 class="font-serif uppercase text-pink text-[10rem] text-center">Help</h1>
-  </header>
-  <section class="h-1/2 space-y-14 uppercase text-center  px-4 md:text-xl tracking-[0.15rem] md:tracking-[0.4rem]">
-    <div class="space-y-3">
-      <p>If you're having issues drop us an email.</p>
-      <p>Let us know if you're coming or if you have anny questions</p>
-    </div>
-    <p>help@harrietandgeorge.co.uk</p>
-  </section>
-</DefaultLayout>
+<StaticLayout title="Help">
+  <div class="h-full flex flex-col justify-center gap-10 py-12 px-6">
+    <header>
+      <h1 class="font-serif text-pink text-7xl uppercase text-center tracking-tighter pt-6">Help</h1>
+    </header>
+    <main class="text-black uppercase text-xs text-center tracking-wide flex flex-col gap-6">
+      <p class="px-10">
+        If you're having issues drop us an email. let us know if your coming or if you have any questions
+      </p>
+      <a href="mailto:help@harrietandgeorge.co.uk">help@harrietandgeorge.co.uk</a>
+    </main>
+    <a href="/help" class="back-button fixed bottom-6 left-6">
+      <span class="text-black uppercase tracking-widest text-sm">Back</span>
+    </a>
+  </div>
+</StaticLayout>
+
+<script>
+const backButton = document.querySelector('.back-button');
+backButton.addEventListener('click', (e) => {
+  e.preventDefault();
+  window.history.back();
+});
+</script>
