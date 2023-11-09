@@ -13,16 +13,16 @@ import StaticLayout from '@layouts/StaticLayout.astro';
       </p>
       <a href="mailto:help@harrietandgeorge.co.uk">help@harrietandgeorge.co.uk</a>
     </main>
-    <a href="/help" class="back-button fixed bottom-6 left-6">
+    <button class="back-button fixed bottom-6 left-6">
       <span class="text-black uppercase tracking-widest text-sm">Back</span>
-    </a>
+    </button>
   </div>
 </StaticLayout>
 
 <script>
 const backButton = document.querySelector('.back-button');
-backButton.addEventListener('click', (e) => {
-  e.preventDefault();
-  window.history.back();
-});
+  backButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.history.back();
+  });
 </script>
