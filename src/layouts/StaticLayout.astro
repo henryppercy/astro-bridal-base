@@ -1,17 +1,20 @@
 ---
 interface Props {
 	title: string;
+	background?: string;
 }
 
-const { title } = Astro.props;
+const path = Astro.url.pathname;
+
+const { title, background = 'bg-white' } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en" class="bg-white">
+<html lang="en" class={`${background} overflow-x-hidden`}>
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="description" content="George and Hattie's wedding portal." />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,12 +34,47 @@ const { title } = Astro.props;
 			}
 		</style>
 	</head>
-	<body class="md:h-screen flex max-md:flex-col max-md:gap-5 max-md:px-4">
-		<header class="h-full md:w-1/2 flex items-center md:justify-start justify-center md:pl-5 lg:pl-20">
-			<slot name="header"/>
-		</header>
-		<main class="h-full md:w-1/2 flex items-start justify-center md:overflow-scroll md:py-10 lg:py-24 mb-10">
-			<slot name="main" />
-		</main>
-	</body>
+	<body class="h-screen overflow-x-hidden">
+		{path !== '/help' && (
+    <button id="nav-toggle" class="fixed top-6 left-6 z-0 cursor-pointer">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 48 48"><path fill="none" class={ background === 'bg-white' ? 'stroke-pink' : 'stroke-white'} stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M7.95 11.95h32m-32 12h32m-32 12h32"/></svg>
+    </button>
+    <nav id="side-nav" class="fixed inset-y-0 left-0 transform -translate-x-full transition-transform duration-300 ease-in-out bg-pink w-full z-20">
+			<button class="nav-close fixed top-6 left-6">
+				<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 48 48"><path fill="none" class="stroke-white" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="m8 8l32 32M8 40L40 8"/></svg>
+			</button>
+      <div class="flex flex-col justify-center items-center gap-6 h-full px-6">
+				<a class="w-full border-2 border-white text-center py-3 rounded-full uppercase text-white hover:text-pink hover:bg-white transition-colors" href="/home">Home</a>
+				<a class="w-full border-2 border-white text-center py-3 rounded-full uppercase text-white hover:text-pink hover:bg-white transition-colors" href="/itinerary">Itinerary</a>
+				<a class="w-full border-2 border-white text-center py-3 rounded-full uppercase text-white hover:text-pink hover:bg-white transition-colors" href="/food">Food & Drink</a>
+				<a class="w-full border-2 border-white text-center py-3 rounded-full uppercase text-white hover:text-pink hover:bg-white transition-colors" href="/dress-code">Dress Code</a>
+				<a class="w-full border-2 border-white text-center py-3 rounded-full uppercase text-white hover:text-pink hover:bg-white transition-colors" href="/more-information">More Info</a>
+      </div>
+			<a href="/help" class="nav-close fixed bottom-6 left-6">
+				<span class="text-white uppercase tracking-widest">Help</span>
+			</a>
+    </nav>
+	)}
+    <div class="flex flex-col h-full">
+      <slot />
+    </div>
+
+  </body>
 </html>
+
+<script>
+	const toggleButton = document.getElementById('nav-toggle');
+	const sideNav = document.getElementById('side-nav');
+	const body = document.querySelector('body');
+
+	toggleButton.addEventListener('click', () => {
+		sideNav.classList.toggle('-translate-x-full');
+		body.classList.toggle('overflow-hidden');
+	});
+
+	const closeButton = document.querySelector('.nav-close');
+	closeButton.addEventListener('click', () => {
+		sideNav.classList.toggle('-translate-x-full');
+		body.classList.toggle('overflow-hidden');
+	});
+</script>
