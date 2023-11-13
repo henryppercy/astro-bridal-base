@@ -1,20 +1,20 @@
 ---
-import HomeLayout from '@layouts/HomeLayout.astro';
+import StaticLayout from '@layouts/StaticLayout.astro';
 ---
 
-<HomeLayout title="Home">
-  <h1 slot="header" class="h-full text-center text-white font-serif md:absolute md:inset-0 flex items-end justify-center text-[11rem] md:text-[23.5rem] lg:top-[7rem] lg:text-[31rem] xl:top-[14rem] xl:text-[40rem] -z-10">
-    H&G
-  </h1>
-  <section slot="main" class="pt-5 gap-10 flex items-start justify-evenly flex-wrap">
-    <a href="dinner" class="font-sans uppercase text-sm md:text-xl tracking-[0.1rem] md:tracking-[0.3rem] border-[0.25rem] text-white border-white hover:bg-white hover:text-black transition-colors rounded-full px-5 py-1">
-      What's for dinner
-    </a>
-    <a href="where" class="font-sans uppercase text-sm md:text-xl tracking-[0.1rem] md:tracking-[0.3rem] border-[0.25rem] text-white border-white hover:bg-white hover:text-black transition-colors rounded-full px-5 py-1">
-      Where is it
-    </a>
-    <a href="faq" class="font-sans uppercase text-sm md:text-xl tracking-[0.1rem] md:tracking-[0.3rem] border-[0.25rem] text-white border-white hover:bg-white hover:text-black transition-colors rounded-full px-5 py-1">
-      FAQ
-    </a>
-  </section>
-</HomeLayout>
+<StaticLayout title="Home" background="bg-pink">
+  <main class="h-full text-center text-white uppercase text-xs flex flex-col justify-center items-center gap-5 px-16 tracking-wide">
+    <p>
+      We're getting the legal bit out the way with just our closest family earlier in the day. all you need to do is dress up, drink cocktails and dance with us all night long.
+    </p>
+    <p>
+      Make your way to the hoxton southwark 12th floor for 3pm, and prepare to welcome the baddest husband and wife duo in town.
+    </p>
+    <p>
+      There'll be drinks, dancing, and nibbles. the party goes on till 1am. we're all about the french exit, no need to say goodbye, we'll catch you soon.
+    </p>
+    <p>
+      Sorry, no kids. it’s a grown-up party, and we want everyone to be able to buy us a drink.
+    </p>
+  </main>
+</StaticLayout>
