@@ -43,8 +43,11 @@
       </form>
     </SlideIn>
   </IntroMain>
-  <nav class="fixed flex bottom-0 w-full px-5 py-4 md:px-16 md:py-10 bg-white">
-    <ul class="flex gap-5 md:gap-8 w-full justify-end">
+  <nav class="fixed flex bottom-0 w-full px-10 py-4 md:px-12 bg-white">
+    <ul class="flex gap-5 md:gap-8 w-full justify-between">
+      <li @click.prevent="handleBack" class="font-sans font-semibold uppercase text-xs tracking-[0.3rem] border-[0.2rem] border-white hover:text-black transition-colors rounded-full cursor-pointer" :disabled="updating" :class="{ 'cursor-not-allowed' : updating}">
+        Back
+      </li>
       <li class="font-sans uppercase text-xs tracking-[0.3rem] border-[0.2rem] border-white hover:text-black transition-colors rounded-full">
         <a href="/help">
           Help
@@ -96,6 +99,11 @@ const guests = ref<GuestFormField[]>([
     completed: false
   }
 ]);
+
+const handleBack = (e: Event) => {
+  e.preventDefault();
+  window.history.back();
+};
 
 const guestFormData = ref<null | HTMLFormElement>(null);
 const showForm = ref(false);
