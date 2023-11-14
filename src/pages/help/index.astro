@@ -13,13 +13,13 @@ import StaticLayout from '@layouts/StaticLayout.astro';
       </p>
       <a href="mailto:help@harrietandgeorge.co.uk">help@harrietandgeorge.co.uk</a>
     </main>
-    <button id="backBtn" class="back-button fixed bottom-6 left-6">
+    <button id="back-button" class="back-button fixed bottom-6 left-6">
       <span class="text-black uppercase tracking-widest text-sm">Back</span>
     </button>
   </div>
 </StaticLayout>
 
-<script type="module">
+<script>
 const backBtn = document.getElementById('back-button');
 if (!backBtn) throw new Error('No back button found');
 
