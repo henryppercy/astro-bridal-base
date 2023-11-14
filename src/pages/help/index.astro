@@ -22,8 +22,9 @@ import StaticLayout from '@layouts/StaticLayout.astro';
 <script>
 const backBtn = document.getElementById('back-button');
 if (!backBtn) throw new Error('No back button found');
-
+console.log(backBtn);
 backBtn.addEventListener('click', () => {
+  console.log('back');
   window.history.back();
 });
 </script>
