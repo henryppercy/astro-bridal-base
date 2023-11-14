@@ -14,7 +14,7 @@
     </IntroMain>
     <nav class="fixed flex bottom-0 w-full px-10 py-8 md:px-16 md:py-10">
       <ul class="flex gap-5 md:gap-8 w-full" :class="stepHistory.length ? 'justify-between' : 'justify-end'">
-        <li v-if="stepHistory.length" @click.prevent="handleBackNavigation" class="font-sans font-semibold uppercase text-xs tracking-[0.3rem] border-[0.2rem] border-white hover:text-black transition-colors rounded-full cursor-pointer" :disabled="updating" :class="{ 'cursor-not-allowed' : updating}">
+        <li v-if="stepHistory.length" @click.prevent="handleBackNavigation" class="font-sans font-semibold uppercase text-xs tracking-[0.3rem] border-[0.2rem] border-white hover:text-black transition-colors rounded-full cursor-pointer" :disabled="updating" :class="{ '!cursor-not-allowed' : updating}">
           Back
         </li>
         <li class="font-sans uppercase text-xs tracking-[0.3rem] border-[0.2rem] border-white hover:text-black transition-colors rounded-full"><a href="/help">
