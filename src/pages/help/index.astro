@@ -20,11 +20,15 @@ import StaticLayout from '@layouts/StaticLayout.astro';
 </StaticLayout>
 
 <script type="module">
-const backBtn = document.getElementById('back-button');
-console.log(backBtn);
-if (!backBtn) throw new Error('No back button found');
-backBtn.addEventListener('click', () => {
-  console.log('back');
-  window.history.back();
-});
+function addBackBtnListener() {
+  const backBtn = document.getElementById('back-button');
+
+  if (!backBtn) return;
+
+  backBtn.addEventListener('click', () => {
+    window.history.back();
+  });
+}
+
+addBackBtnListener();
 </script>
