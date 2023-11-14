@@ -226,7 +226,9 @@ const submitForm = async (e: Event) => {
     if (response.ok) {
       showForm.value = false;
       requestPending.value = false;
+
       console.log('Successfully submitted');
+      window.location.href = response.url;
     }
   } catch (error) {
     console.error('There was an error:', error);
