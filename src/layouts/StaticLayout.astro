@@ -63,15 +63,19 @@ const { title, background = 'bg-white' } = Astro.props;
 
 <script>
 	const toggleButton = document.getElementById('nav-toggle');
+	const closeButton = document.querySelector('.nav-close');
 	const sideNav = document.getElementById('side-nav');
 	const body = document.querySelector('body');
+
+	if (toggleButton === null || sideNav === null || body === null || closeButton === null) {
+		return;
+	}
 
 	toggleButton.addEventListener('click', () => {
 		sideNav.classList.toggle('-translate-x-full');
 		body.classList.toggle('overflow-hidden');
 	});
 
-	const closeButton = document.querySelector('.nav-close');
 	closeButton.addEventListener('click', () => {
 		sideNav.classList.toggle('-translate-x-full');
 		body.classList.toggle('overflow-hidden');
