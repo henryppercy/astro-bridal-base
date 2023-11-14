@@ -1,4 +1,19 @@
 <template>
+  <SlideIn>
+    <div v-if="error" class="flex justify-center w-full py-4 px-4 md:px-10 fixed">
+      <div class="w-full bg-pink text-xs md:text-sm rounded-2xl px-4 py-2 top-0 left-0 uppercase text-white flex justify-between">
+        <p>Something went wrong, please try again or send us an <span class="max-md:hidden">email </span>
+          <a href="mailto:help@harrietandgeorge.co.uk" class="border-b">
+            <span class="max-md:hidden">help@harrietandgeorge.co.uk</span>
+            <span class="md:hidden">email</span>
+          </a>
+        </p>
+        <button @click.prevent="error = false">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 48 48"><path fill="none" class="stroke-white" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="m8 8l32 32M8 40L40 8"/></svg>
+        </button>
+      </div>
+    </div>
+  </SlideIn>
   <IntroHeader class="max-md:hidden">
     <span>{{ title }}</span>
   </IntroHeader>
@@ -101,6 +116,7 @@ const guestFormData = ref<null | HTMLFormElement>(null);
 const showForm = ref(false);
 const requestPending = ref(false);
 const guestsCompleted = computed(() => guests.value.every((guest) => guest.completed));
+const error = ref(false);
 
 const clearErrors = () => {
   guests.value.forEach((guest) => {
@@ -181,6 +197,7 @@ const addGuest = () => {
 };
 
 const submitForm = async (e: Event) => {
+  error.value = false;
   requestPending.value = true;
   clearErrors();
 
@@ -199,6 +216,9 @@ const submitForm = async (e: Event) => {
       if (response.status === 422) {
         const data = await response.json();
         data.forEach((guestError: IndexedValidationError) => guests.value[guestError.index].errors = formatZodValidationError(guestError));
+        requestPending.value = false;
+      } else {
+        error.value = true;
         requestPending.value = false;
       }
     }
