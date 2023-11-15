@@ -17,14 +17,17 @@ export const guestSchema = z.object({
     .transform((value) => value.charAt(0).toUpperCase() + value.slice(1)),
   email: z
     .string({ required_error: "Please enter your email address" })
+    .trim()
     .email({ message: "Please enter a valid email address" })
     .transform((value) => value.toLowerCase()),
   confirm_email: z
     .string({ required_error: "Please confirm your email address" })
     .email({ message: "Please enter a valid email address" })
+    .trim()
     .transform((value) => value.toLowerCase()),
   dietary_requirements: z
     .string()
+    .trim()
     .max(50, { message: "Dietary requirements should be under 50 characters" })
     .optional()
 })
