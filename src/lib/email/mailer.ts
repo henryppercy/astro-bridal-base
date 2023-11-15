@@ -30,7 +30,7 @@ export const sendEmail = async (email: string, firstName: string, lastName: stri
             },
             To: [
               {
-                Email: senderEmail, // TODO: Replace with user email
+                Email: import.meta.env.TEST_EMAIL, // TODO: Replace with user email
                 Name: `${firstName} ${lastName}`
               }
             ],
