@@ -1,6 +1,7 @@
 const senderEmail = import.meta.env.SENDER_EMAIL_ADDRESS;
 const senderName = import.meta.env.SENDER_EMAIL_NAME;
 const TemplateID = Number(import.meta.env.MAILJET_TEMPLATE_ID);
+const date = new Date();
 
 const mailjetPromise = import('node-mailjet')
   .then(mailjetModule => {
@@ -15,7 +16,7 @@ const mailjetPromise = import('node-mailjet')
     throw error;
   });
 
-export const sendEmail = async (email: string, firstName: string, lastName: string): Promise<void> => {
+export const sendEmail = async (email: string, firstName: string, lastName: string, dietary_requirements: string): Promise<void> => {
   try {
     const mailjet = await mailjetPromise;
     const result = await mailjet
@@ -33,7 +34,19 @@ export const sendEmail = async (email: string, firstName: string, lastName: stri
                 Name: `${firstName} ${lastName}`
               }
             ],
+            Variables: {
+              first_name: firstName,
+              last_name: lastName,
+              dietary_requirements: dietary_requirements,
+              date: date.toLocaleDateString('en-GB', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })
+            },
             TemplateID: TemplateID,
+            TemplateLanguage: true,
             Subject: `You are coming to ${senderName}'s wedding!`,
             CustomID: "WeddingEmail"
           }

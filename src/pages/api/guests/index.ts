@@ -32,7 +32,8 @@ export const POST: APIRoute = async ({ request, redirect }) => {
       sendEmail(
         validatedGuest.guest.email,
         validatedGuest.guest.first_name,
-        validatedGuest.guest.last_name
+        validatedGuest.guest.last_name,
+        validatedGuest.guest.dietary_requirements ?? ''
       )
     );
     await Promise.all(sendEmailPromises);
