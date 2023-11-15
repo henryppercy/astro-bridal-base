@@ -2,33 +2,33 @@ import { z } from "zod";
 
 export const guestSchema = z.object({
   first_name: z
-    .string({ required_error: "First name is required" })
+    .string({ required_error: "Please enter your first name" })
     .trim()
-    .min(2, { message: "First name must be at least 2 characters long" })
-    .max(50, { message: "First name must be less than 50 characters long" })
-    .regex(/^[a-zA-Z]+$/, { message: "First name must only contain letters" })
+    .regex(/^[a-zA-Z]+$/, { message: "Your first name should only contain letters" })
+    .max(50, { message: "Your first name should be shorter than 50 characters" })
+    .min(2, { message: "Your first name should have at least 2 characters" })
     .transform((value) => value.charAt(0).toUpperCase() + value.slice(1)),
   last_name: z
-    .string({ required_error: "Last name is required" })
+    .string({ required_error: "Please enter your last name" })
     .trim()
-    .min(2, { message: "Last name must be at least 2 characters long" })
-    .max(50, { message: "Last name must be less than 50 characters long" })
-    .regex(/^[a-zA-Z]+$/, { message: "Last name must only contain letters" })
+    .regex(/^[a-zA-Z]+$/, { message: "Your last name should only contain letters" })
+    .min(2, { message: "Your last name should have at least 2 characters" })
+    .max(50, { message: "Your last name should be shorter than 50 characters" })
     .transform((value) => value.charAt(0).toUpperCase() + value.slice(1)),
   email: z
-    .string({ required_error: "Email is required" })
-    .email()
+    .string({ required_error: "Please enter your email address" })
+    .email({ message: "Please enter a valid email address" })
     .transform((value) => value.toLowerCase()),
   confirm_email: z
-    .string()
-    .email()
+    .string({ required_error: "Please confirm your email address" })
+    .email({ message: "Please enter a valid email address" })
     .transform((value) => value.toLowerCase()),
   dietary_requirements: z
     .string()
-    .max(50, { message: "Dietary requirements must be less than 50 characters long" })
+    .max(50, { message: "Dietary requirements should be under 50 characters" })
     .optional()
 })
 .refine(data => data.email === data.confirm_email, {
-  message: "Emails do not match",
+  message: "The email addresses must match",
   path: ["confirm_email"]
 });
