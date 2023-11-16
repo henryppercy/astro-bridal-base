@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-5">
-    <div class="flex flex-col md:flex-row gap-2 md:gap-8 bg-white-light p-3 md:p-6 rounded-[1.5em] md:rounded-xl">
+    <div class="flex flex-col md:flex-row gap-2 md:gap-8 bg-white-light p-3 lg:p-6 rounded-[1.5em] md:rounded-xl">
       <div class="space-y-2 md:space-y-3 w-full">
         <div class="relative">
           <input v-model="guest.first_name" @input="handleInput('first_name')" :class="{ '!bg-pink !text-white': guest.first_name !== '' }" class="text-sm md:text-base tracking-[0.05rem] text-black placeholder-white-light border-white-light focus:outline-none focus:border-black border-[0.17rem] md:border-[0.25rem] rounded-full bg-white w-full h-10 px-4 uppercase" type="text" :id="`first_name_${guestNo}`" :name="`first_name_${guestNo}`" placeholder="First name" required />
