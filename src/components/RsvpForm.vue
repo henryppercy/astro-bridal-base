@@ -24,7 +24,7 @@
   </header> 
   <IntroMain>
     <SlideIn>
-      <form ref="guestFormData" v-if="showForm" @submit.prevent="submitForm" class="flex flex-col md:flex-row gap-5 pb-8 md:pb-20">
+      <form ref="guestFormData" v-if="showForm" @submit.prevent="submitForm" class="flex flex-col md:flex-row gap-5 pb-8 md:pb-20 mx-auto md:px-16 lg:px-20">
         <div class="space-y-4 md:space-y-8 pb-16 w-full">
           <template v-for="(guest, index) in guests" :key="index">
             <RsvpField 
@@ -58,9 +58,14 @@
       </form>
     </SlideIn>
   </IntroMain>
-  <nav class="fixed flex bottom-0 w-full px-10 py-4 md:px-12 bg-white">
+  <nav class="fixed flex bottom-0 w-full px-6 py-3 md:px-12 max-md:bg-white">
     <ul class="flex gap-5 md:gap-8 w-full justify-between">
-      <li class="font-sans uppercase text-xs tracking-[0.3rem] border-[0.2rem] border-white hover:text-black transition-colors rounded-full">
+      <li class="font-sans uppercase text-xs tracking-[0.3rem] text-black">
+        <a href="/">
+          Back
+        </a>
+      </li>
+      <li class="font-sans uppercase text-xs tracking-[0.3rem] text-black">
         <a href="/help">
           Help
         </a>
