@@ -2,11 +2,10 @@
 interface Props {
 	title: string;
 	background?: string;
+	showNav?: boolean;
 }
 
-const path = Astro.url.pathname;
-
-const { title, background = 'bg-white' } = Astro.props;
+const { title, background = 'bg-white', showNav = true } = Astro.props;
 ---
 
 <!doctype html>
@@ -35,7 +34,7 @@ const { title, background = 'bg-white' } = Astro.props;
 		</style>
 	</head>
 	<body class="h-screen overflow-x-hidden">
-		{path !== '/help' && (
+		{showNav && (
     <button id="nav-toggle" class="fixed top-6 left-6 cursor-pointer z-30">
       <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 48 48"><path fill="none" class={ background === 'bg-white' ? 'stroke-pink' : 'stroke-white'} stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M7.95 11.95h32m-32 12h32m-32 12h32"/></svg>
     </button>

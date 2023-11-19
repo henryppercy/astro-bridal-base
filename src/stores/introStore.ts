@@ -53,7 +53,10 @@ export const steps: Steps = {
     step: 4,
     title: 'Come Back When You\'re Ready',
     param: 'come-back-when-youre-ready',
-    buttons: [{ text: 'Okay I\'m Ready', nextStep: 3 }]
+    buttons: [
+      { text: 'Okay I\'m Ready', nextStep: 3 },
+      { text: 'Tell me More', nextStep: 7 }
+    ]
   },
   5: {
     step: 5,
@@ -66,5 +69,11 @@ export const steps: Steps = {
     title: 'Nice, Just Need a Few More Things',
     param: 'nice-just-need-a-few-more-things',
     buttons: []
-  }
+  },
+  7: {
+    step: 7,
+    title: '',
+    param: '',
+    buttons: []
+  },
 };

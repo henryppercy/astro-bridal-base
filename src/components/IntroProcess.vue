@@ -6,7 +6,7 @@
     <IntroMain class="gap-4 md:gap-10 flex items-start justify-evenly flex-wrap">
       <SlideIn>
         <div class="max-md:w-full" v-for="button in step.buttons" :key="button.text">
-          <AppButton @click="button.nextStep === 6 ? navigateToForm() : changeStep(steps[button.nextStep].title, button.nextStep)" :disabled="updating">
+          <AppButton @click="handleChangeStep(steps[button.nextStep].title, button.nextStep)" :disabled="updating">
             {{ button.text }}
           </AppButton>
         </div>
@@ -73,6 +73,20 @@ const changeStep = (newTitle: string, nextStep: number, addToHistory: boolean = 
   setTimeout(() => {
     step.value = { ...steps[nextStep] };
   }, wordRemoveSpeed + wordAddSpeed + delayBeforeTypingIn);
+};
+
+const handleChangeStep = (newTitle: string, nextStep: number) => {
+  switch (nextStep) {
+    case 7:
+      window.location.href = '/extra-information';
+      break;
+    case 6:
+      navigateToForm()
+      break;
+    default:
+      changeStep(newTitle, nextStep);
+      break;
+  }
 };
 
 const navigateToForm = async () => {
