@@ -7,21 +7,21 @@ import StaticLayout from '@layouts/StaticLayout.astro';
     <header class="justify-self-start">
       <h1 class="font-serif text-pink text-7xl md:text-8xl lg:text-9xl text-center tracking-tighter pt-6 md:text-start">More Info</h1>
     </header>
-    <main class="space-y-5">
+    <main class="space-y-5 max-w-md">
       <div>
         <h1 class="font-serif text-pink text-4xl tracking-tighter">
           Where
         </h1>
         <p class="text-black uppercase text-sm md:text-base [&_a]:underline underline-offset-2">
-          We're getting married at <a href="https://thehoxton.com/london/southwark/">The Hoxton Southwark</a>
+          We're getting married at <a href="https://thehoxton.com/london/southwark/" target="_blank">The Hoxton Southwark</a>
         </p>
       </div>
       <div>
         <h1 class="font-serif text-pink text-4xl tracking-tighter">
           Getting Around
         </h1>
-        <p class="text-black uppercase text-sm md:text-base">
-          City Mapper | Uber
+        <p class="text-black uppercase text-sm md:text-base [&_a]:underline underline-offset-2">
+          <a href="https://apps.apple.com/gb/app/citymapper-live-transport/id469463298" target="_blank">City Mapper</a> | <a href="https://apps.apple.com/us/app/uber-request-a-ride/id368677368" target="_blank">Uber</a>
         </p>
       </div>
       <div>
@@ -29,14 +29,10 @@ import StaticLayout from '@layouts/StaticLayout.astro';
           Closest Stations
         </h1>
         <p class="text-black uppercase text-sm md:text-base">
-          <ul>
-            <li>
-              Waterloo and London Bridge stations - 10 min walk
-            </li>
-            <li>
-              Southwark Tube (Jubilee Line)
-            </li>
-          </ul>
+          Waterloo and London Bridge stations - 10 min walk
+        </p>
+        <p class="text-sm md:text-base">
+          Southwark Tube (Jubilee Line)
         </p>
       </div>
       <div>

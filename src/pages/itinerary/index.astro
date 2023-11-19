@@ -33,14 +33,6 @@ const timelineEntries = [
   {
     time: '20:00',
     event: 'Evening Guests Arrive'
-  },
-  {
-    time: '21:00',
-    event: 'Pass Out'
-  },
-  {
-    time: '22:00',
-    event: 'Second Breakfast'
   }
 ];
 ---
@@ -57,10 +49,10 @@ const timelineEntries = [
         >
           <div class="relative">
             <div class="sticky top-24">
-              <h2 class="text-pink font-serif text-3xl md:text-4xl">
+              <h2 class="text-pink font-serif text-3xl md:text-5xl">
               { entry.time }
               </h2>
-              <h3>
+              <h3 class="text-sm md:text-base">
                 { entry.event }
               </h3>
               </div>
