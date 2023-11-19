@@ -81,7 +81,7 @@ import SlideIn from '@components/SlideIn.vue';
 import RsvpField from '@components/RsvpField.vue';
 import { title, mobileTitle } from '@stores/introStore';
 import { changeTitle, changeMobileTitle, createNewGuestField, formatZodValidationError, validateGuests } from '@lib/utils';
-import { onMounted, onBeforeMount, ref, computed } from 'vue';
+import { onMounted, onBeforeMount, onBeforeUnmount, ref, computed } from 'vue';
 import type { Guest, GuestFormField, IndexedValidationError, IndexedGuest } from '@lib/types';
 import RsvpCompleteCard from './RsvpCompleteCard.vue';
 import AppButton from './AppButton.vue';
@@ -95,6 +95,14 @@ onMounted(() => {
     showForm.value = true;
   }, 1);
 });
+
+onBeforeUnmount(() => {
+  setTimeout(async () => {
+    changeMobileTitle('Guest Details')
+    changeTitle('Nice, Just Need a Few More Details');
+    showForm.value = true;
+  }, 1);
+})
 
 const guests = ref<GuestFormField[]>([
   {
