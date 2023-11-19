@@ -50,7 +50,7 @@
           </template>
           <SlideIn>
             <div v-if="guestsCompleted && !requestPending" class="flex items-center justify-between flex-col gap-5 md:flex-row">
-              <AppButton class="font-sans uppercase text-sm md:text-lg tracking-[0.1rem] md:tracking-[0.3rem] border-[0.25rem] border-black hover:bg-black hover:text-white transition-colors rounded-full px-5 py-1 h-fit whitespace-nowrap" @click.prevent="addGuest">New Guest</AppButton>
+              <AppButton class="font-sans uppercase text-sm md:text-lg tracking-[0.1rem] md:tracking-[0.3rem] border-[0.25rem] border-black hover:bg-black hover:text-white transition-colors rounded-full px-5 py-1 h-fit whitespace-nowrap" @click.prevent="addGuest" type="button">New Guest</AppButton>
               <AppButton class="font-sans uppercase text-sm md:text-xl tracking-[0.1rem] md:tracking-[0.3rem] border-[0.25rem] border-black hover:bg-black hover:text-white transition-colors rounded-full px-5 py-1 h-fit whitespace-nowrap" type="submit">Finished</AppButton>
             </div>
           </SlideIn>
