@@ -20,7 +20,7 @@
         </div>
         <div class="max-md:hidden flex flex-col md:flex-row justify-between gap-2">
           <button @click.prevent="saveGuest" class="font-sans uppercase tracking-[0.2rem] border-[0.2rem] border-black hover:bg-black bg-white hover:text-white transition-colors rounded-full px-5 py-3 w-full">Save</button>
-          <button v-if="!onlyGuest" @click.prevent="removeGuest" class="uppercase text-sm tracking-[0.3rem] border-[0.25rem] border-black hover:bg-black bg-white hover:text-white transition-colors rounded-full px-5 py-2 w-1/2">Remove</button>
+          <button v-if="!onlyGuest" @click.prevent="removeGuest" type="button" class="font-sans uppercase tracking-[0.2rem] border-[0.2rem] border-black hover:bg-black bg-white hover:text-white transition-colors rounded-full px-5 py-3 w-full">Remove</button>
         </div>
       </div>
       <div class="flex flex-col md:w-3/4">
@@ -29,7 +29,7 @@
       </div>
       <div class="md:hidden flex flex-col md:flex-row justify-between gap-2">
         <AppButton @click.prevent="saveGuest">Save</AppButton>
-        <AppButton v-if="!onlyGuest" @click.prevent="removeGuest">Remove</AppButton>
+        <AppButton v-if="!onlyGuest" @click.prevent="removeGuest" type="button">Remove</AppButton>
       </div>
     </div>
   </div>

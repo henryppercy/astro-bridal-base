@@ -6,8 +6,8 @@
       <p class="uppercase text-white tracking-widest md:text-lg">{{ guest.dietary_requirements ? guest.dietary_requirements : 'No Dietary Requirements' }}</p>
     </div>
     <div v-if="!requestPending" class="flex gap-4 md:h-10">
-      <button v-if="!onlyGuest" @click.prevent="deleteGuest" class="rounded-full bg-white text-pink px-5 py-1 uppercase tracking-[0.1rem] hover:text-white hover:bg-pink hover:ring-2 hover:ring-white w-1/2 md:w-fit">Delete</button>
-      <button @click.prevent="editGuest" class="rounded-full bg-white text-pink px-5 py-1 uppercase tracking-[0.1rem] hover:text-white hover:bg-pink hover:ring-2 hover:ring-white w-1/2 md:w-fit">Edit</button>
+      <button v-if="!onlyGuest" type="button" @click.prevent="deleteGuest" class="rounded-full bg-white text-pink px-5 py-1 uppercase tracking-[0.1rem] hover:text-white hover:bg-pink hover:ring-2 hover:ring-white w-1/2 md:w-fit">Delete</button>
+      <button @click.prevent="editGuest" type="button" class="rounded-full bg-white text-pink px-5 py-1 uppercase tracking-[0.1rem] hover:text-white hover:bg-pink hover:ring-2 hover:ring-white w-1/2 md:w-fit">Edit</button>
     </div>
     <div v-if="requestPending" class="animate-pulse space-y-3 w-full">
       <div class="bg-white/70 h-5 rounded-xl w-full"></div>
