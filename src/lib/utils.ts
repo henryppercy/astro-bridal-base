@@ -27,6 +27,7 @@ export const generateGuestArray = (formData: FormData): Guest[] => {
       email: formData.get(`email_${guestNumber}`) as string,
       confirm_email: formData.get(`confirm_email_${guestNumber}`) as string,
       dietary_requirements: formData.get(`dietary_requirements_${guestNumber}`) as string | undefined,
+      rsvp: formData.get(`rsvp_${guestNumber}`) as string
     };
     guests.push(guest);
   }
@@ -62,7 +63,8 @@ export const formatZodValidationError = (error: IndexedValidationError) => {
     last_name: '',
     email: '',
     confirm_email: '',
-    dietary_requirements: ''
+    dietary_requirements: '',
+    rsvp: ''
   });
 }
 
@@ -134,5 +136,6 @@ export const createEmptyGuest = () => ({
   last_name: '',
   email: '',
   confirm_email: '',
-  dietary_requirements: ''
+  dietary_requirements: '',
+  rsvp: ''
 });

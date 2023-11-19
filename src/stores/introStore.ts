@@ -44,25 +44,18 @@ export const steps: Steps = {
     title: 'Are you coming?',
     param: 'Are-you-coming',
     buttons: [
-      { text: 'Yes!', nextStep: 5 },
-      { text: 'Tell me More', nextStep: 6 },
-      { text: 'Nah', nextStep: 4 }
+      { text: 'RSVP', nextStep: 4 },
+      { text: 'Tell me More', nextStep: 5 },
     ]
   },
   4: {
     step: 4,
-    title: 'We\'ll Miss Ya',
-    param: 'well-miss-ya',
-    buttons: [{ text: 'Actually, I\'ve Changed My Mind', nextStep: 3 }]
-  },
-  5: {
-    step: 5,
     title: 'Nice, Just Need a Few More Things',
     param: 'nice-just-need-a-few-more-things',
     buttons: []
   },
-  6: {
-    step: 6,
+  5: {
+    step: 5,
     title: '',
     param: '',
     buttons: []

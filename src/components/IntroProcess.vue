@@ -77,10 +77,10 @@ const changeStep = (newTitle: string, nextStep: number, addToHistory: boolean = 
 
 const handleChangeStep = (newTitle: string, nextStep: number) => {
   switch (nextStep) {
-    case 6:
+    case 5:
       window.location.href = '/extra-information';
       break;
-    case 5:
+    case 4:
       navigateToForm()
       break;
     default:

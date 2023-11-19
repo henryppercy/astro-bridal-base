@@ -112,14 +112,16 @@ const guests = ref<GuestFormField[]>([
       last_name: '',
       email: '',
       confirm_email: '',
-      dietary_requirements: ''
+      dietary_requirements: '',
+      rsvp: ''
     },
     data: {
       first_name: '',
       last_name: '',
       email: '',
       confirm_email: '',
-      dietary_requirements: ''
+      dietary_requirements: '',
+      rsvp: ''
     },
     completed: false
   }
@@ -138,7 +140,8 @@ const clearErrors = () => {
       last_name: '',
       email: '',
       confirm_email: '',
-      dietary_requirements: ''
+      dietary_requirements: '',
+      rsvp: ''
     };
   });
 };
@@ -149,7 +152,8 @@ const clearGuestError = (guestNumber: number) => {
     last_name: '',
     email: '',
     confirm_email: '',
-    dietary_requirements: ''
+    dietary_requirements: '',
+    rsvp: ''
   };
 };
 

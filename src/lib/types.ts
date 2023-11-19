@@ -6,6 +6,7 @@ export type Guest = {
   email: string;
   confirm_email: string;
   dietary_requirements?: string;
+  rsvp: string;
 };
 
 export type GuestFormField = {
