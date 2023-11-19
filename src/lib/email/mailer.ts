@@ -17,6 +17,8 @@ const mailjetPromise = import('node-mailjet')
   });
 
 export const sendEmail = async (email: string, firstName: string, lastName: string, dietary_requirements: string): Promise<void> => {
+  console.log('Sending email to', email);
+  console.log('Sending email from', import.meta.env.TEST_EMAIL);
   try {
     const mailjet = await mailjetPromise;
     const result = await mailjet
