@@ -35,32 +35,28 @@ const timelineEntries = [
     event: 'Evening Guests Arrive'
   },
   {
-    time: '21:00',
-    event: 'Pass Out'
-  },
-  {
-    time: '22:00',
-    event: 'Second Breakfast'
+    time: '01:00',
+    event: 'Home Time'
   }
 ];
 ---
 
 <StaticLayout title="Itineray" >
-  <div class="py-12 px-6 lg:py-6 space-y-6 md:grid grid-cols-2 justify-items-center items-center md:h-full gap-10">
-    <header class="justify-self-start">
+  <div class="pb-12 px-6 lg:py-6 space-y-6 md:grid grid-cols-2 justify-items-center items-center md:h-full gap-10">
+    <header class="justify-self-start max-md:fixed max-md:bg-white pt-12 z-20 w-11/12">
       <h1 class="font-serif text-pink text-7xl md:text-8xl lg:text-9xl uppercase text-center tracking-tighter pt-6">Itinerary</h1>
     </header>
-    <main class="text-black uppercase text-xs tracking-wide h-full w-fit overflow-y-scroll hide-scrollbar lg:pb-10">
+    <main class="text-black uppercase text-xs tracking-wide h-full w-fit md:overflow-y-scroll hide-scrollbar lg:pb-10 max-md:pt-32">
       {timelineEntries.map((entry, index) => (
         <article 
           class={`${index === timelineEntries.length - 1 ? 'before:h-1/2' : 'before:h-full'} relative grid before:content-[''] ml-12 before:block before:absolute before:left-[-25px] before:border-l before:border-pink pt-3 md:pt-6`}
         >
           <div class="relative">
             <div class="sticky top-24">
-              <h2 class="text-pink font-serif text-3xl md:text-4xl">
+              <h2 class="text-pink font-serif text-3xl md:text-5xl">
               { entry.time }
               </h2>
-              <h3>
+              <h3 class="text-sm md:text-base">
                 { entry.event }
               </h3>
               </div>

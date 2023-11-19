@@ -36,19 +36,19 @@ const { title, background = 'bg-white' } = Astro.props;
 	</head>
 	<body class="h-screen overflow-x-hidden">
 		{path !== '/help' && (
-    <button id="nav-toggle" class="fixed top-6 left-6 z-0 cursor-pointer">
+    <button id="nav-toggle" class="fixed top-6 left-6 cursor-pointer z-30">
       <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 48 48"><path fill="none" class={ background === 'bg-white' ? 'stroke-pink' : 'stroke-white'} stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="M7.95 11.95h32m-32 12h32m-32 12h32"/></svg>
     </button>
-    <nav id="side-nav" class="fixed inset-y-0 left-0 transform -translate-x-full transition-transform duration-300 ease-in-out bg-pink w-full z-20">
+    <nav id="side-nav" class="fixed inset-y-0 left-0 transform -translate-x-full transition-transform duration-300 ease-in-out bg-pink w-full z-50">
 			<button class="nav-close fixed top-6 left-6">
 				<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 48 48"><path fill="none" class="stroke-white" stroke-linecap="round" stroke-linejoin="round" stroke-width="4" d="m8 8l32 32M8 40L40 8"/></svg>
 			</button>
       <div class="flex flex-col lg:grid grid-rows-5 grid-cols-5 justify-center items-center lg:justify-evenly gap-6 lg:gap-0 h-full px-6 lg:py-24 lg:px-44">
 				<a class="w-full lg:w-fit col-start-1 row-start-1 justify-self-center border-2 lg:border-[3px] lg:tracking-[0.3rem] border-white text-center py-3 lg:p-1 lg:px-3 rounded-full uppercase text-white hover:text-pink hover:bg-white transition-colors" href="/home">Home</a>
-				<a class="w-full lg:w-fit col-start-2 row-start-2 col-span-2 border-2 lg:border-[3px] lg:tracking-[0.3rem] border-white text-center py-3 lg:p-1 lg:px-3 rounded-full uppercase text-white hover:text-pink hover:bg-white transition-colors" href="/itinerary">Itinerary</a>
-				<a class="w-full lg:w-fit col-start-3 row-start-3 col-span-2 border-2 lg:border-[3px] lg:tracking-[0.3rem] border-white text-center py-3 lg:p-1 lg:px-3 rounded-full uppercase text-white hover:text-pink hover:bg-white transition-colors" href="/food">Food & Drink</a>
-				<a class="w-full lg:w-fit col-start-4 row-start-4 col-span-2 border-2 lg:border-[3px] lg:tracking-[0.3rem] border-white text-center py-3 lg:p-1 lg:px-3 rounded-full uppercase text-white hover:text-pink hover:bg-white transition-colors" href="/dress-code">Dress Code</a>
-				<a class="w-full lg:w-fit col-start-5 row-start-5 col-span-2 border-2 lg:border-[3px] lg:tracking-[0.3rem] border-white text-center py-3 lg:p-1 lg:px-3 rounded-full uppercase text-white hover:text-pink hover:bg-white transition-colors whitespace-nowrap" href="/more-information">More Info</a>
+				<a class="w-full lg:w-fit col-start-2 row-start-2 col-span-2 border-[0.15rem] lg:border-[3px] lg:tracking-[0.3rem] border-white text-center py-3 lg:p-1 lg:px-3 rounded-full uppercase text-white hover:text-pink hover:bg-white transition-colors" href="/itinerary">Itinerary</a>
+				<a class="w-full lg:w-fit col-start-3 row-start-3 col-span-2 border-[0.15rem] lg:border-[3px] lg:tracking-[0.3rem] border-white text-center py-3 lg:p-1 lg:px-3 rounded-full uppercase text-white hover:text-pink hover:bg-white transition-colors" href="/food">Food & Drink</a>
+				<a class="w-full lg:w-fit col-start-4 row-start-4 col-span-2 border-[0.15rem] lg:border-[3px] lg:tracking-[0.3rem] border-white text-center py-3 lg:p-1 lg:px-3 rounded-full uppercase text-white hover:text-pink hover:bg-white transition-colors" href="/dress-code">Dress Code</a>
+				<a class="w-full lg:w-fit col-start-5 row-start-5 col-span-2 border-[0.15rem] lg:border-[3px] lg:tracking-[0.3rem] border-white text-center py-3 lg:p-1 lg:px-3 rounded-full uppercase text-white hover:text-pink hover:bg-white transition-colors whitespace-nowrap" href="/more-information">More Info</a>
       </div>
 			<a href="/help" class="nav-close fixed bottom-6 left-6">
 				<span class="text-white uppercase tracking-widest">Help</span>
