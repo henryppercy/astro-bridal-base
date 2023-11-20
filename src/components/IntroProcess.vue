@@ -35,7 +35,7 @@ onBeforeUnmount(() => stepHistory.value = []);
 
 onMounted(() => {
   setTimeout(() => {
-    changeStep('Hello', 1);
+    changeStep('ello', 1);
   }, 2000);
 });
 
@@ -62,9 +62,13 @@ const changeStep = (newTitle: string, nextStep: number, addToHistory: boolean = 
 
 const handleChangeStep = async (newTitle: string, nextStep: number) => {
   if (nextStep === 3) {
+    const html = document.querySelector('html');
     showButtons.value = false;
-    await removeCharacter();
-    navigate('/home')
+    await removeCharacter(true);
+    await html?.classList.add('!bg-pink');
+    setTimeout(() => {
+      navigate('/home')
+    }, 700);
   } else {
     changeStep(newTitle, nextStep)
   }

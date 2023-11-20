@@ -26,13 +26,13 @@ export const steps: Steps = {
   },
   1: {
     step: 1,
-    title: 'Hello',
+    title: 'ello',
     param: 'hello',
     buttons: [{ text: 'Hey', nextStep: 2 }]
   },
   2: {
     step: 2,
-    title: 'Harriet & George Are Tying the Knot',
+    title: 'arriet & George Are Tying the Knot',
     param: 'tying-the-Knot',
     buttons: [
       { text: 'Finally, It\'s About Time He Asked', nextStep: 3 },

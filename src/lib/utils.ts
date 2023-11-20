@@ -70,11 +70,13 @@ export const formatZodValidationError = (error: IndexedValidationError) => {
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-export const removeCharacter = async () => {
+export const removeCharacter = async (removeAll = false) => {
   let removeLetterTime = removeSentenceTime/title.value.length;
   if (title.value.length > longTitleLength) removeLetterTime = removeLetterTimeFast;
+  
+  const whileNumber = removeAll ? 0 : 1;
 
-  while (title.value.length > 0) {
+  while (title.value.length > whileNumber) {
     title.value = title.value.slice(0, -1);
     if (title.value.length <= slowCharacters) removeLetterTime = removeLetterTimeSlow;
     await sleep(removeLetterTime);
