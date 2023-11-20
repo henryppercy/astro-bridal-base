@@ -57,14 +57,14 @@ images.sort(() => Math.random() - 0.5);
         <div id="carouselContainer" class="relative flex items-center overflow-x-auto hide-scrollbar h-full">
           {images.map(image => {
             return (
-            <div class="inline-flex">
-              <div class="shrink-0 w-80 h-[450px] md:h-[350px]">
-                <Image class="w-full h-full object-cover rounded-lg shadow-xl" src={image} alt="stylish person" height="450"/>
+              <div class="inline-flex">
+                <div class="shrink-0 w-80 h-[450px] md:h-[350px]">
+                  <Image class="w-full h-full object-cover rounded-lg shadow-xl" src={image} alt="Dress like this person" height="450"/>
+                </div>
+                <div class="shrink-0 w-6"></div>
               </div>
-              <div class="shrink-0 w-6"></div>
-            </div>
-              );
-            })}
+            );
+          })}
         </div>
       </section>
     </main>
