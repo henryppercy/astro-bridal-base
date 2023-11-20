@@ -29,7 +29,13 @@ export const guestSchema = z.object({
     .string()
     .trim()
     .max(50, { message: "Dietary requirements should be under 50 characters" })
-    .optional()
+    .optional(),
+  rsvp: z
+    .string({ required_error: "Please let us know if you can make it" })
+    .transform((value) => value.toLowerCase())
+    .refine((value) => value === "yes" || value === "no", {
+      message: "Please let us know if you can make it",
+    })
 })
 .refine(data => data.email === data.confirm_email, {
   message: "The email addresses must match",

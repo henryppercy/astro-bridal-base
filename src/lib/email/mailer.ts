@@ -1,7 +1,8 @@
 const senderEmail = import.meta.env.SENDER_EMAIL_ADDRESS;
 const senderName = import.meta.env.SENDER_EMAIL_NAME;
 const TemplateID = Number(import.meta.env.MAILJET_TEMPLATE_ID);
-const date = new Date();
+const TemplateIDNotComing = Number(import.meta.env.MAILJET_REJECT_TEMPLATE_ID);
+
 
 const mailjetPromise = import('node-mailjet')
   .then(mailjetModule => {
@@ -15,6 +16,43 @@ const mailjetPromise = import('node-mailjet')
     console.error('Failed to load mailjet module', error);
     throw error;
   });
+
+
+export const sendNotComingEmail = async (email: string, firstName: string, lastName: string): Promise<void> => {
+  try {
+    const mailjet = await mailjetPromise;
+    const result = await mailjet
+      .post("send", { version: 'v3.1' })
+      .request({
+        Messages: [
+          {
+            From: {
+              Email: senderEmail,
+              Name: senderName
+            },
+            To: [
+              {
+                Email: import.meta.env.TEST_EMAIL, // TODO: Replace with user email
+                Name: `${firstName} ${lastName}`
+              }
+            ],
+            Variables: {
+              first_name: firstName,
+              last_name: lastName
+            },
+            TemplateID: TemplateIDNotComing,
+            TemplateLanguage: true,
+            Subject: `H&G | We'll Miss Ya!`,
+            CustomID: "WeddingEmail"
+          }
+        ]
+      });
+
+    console.log(result.body);
+  } catch (err) {
+    console.error('Failed to send reject email', err);
+  }
+}
 
 export const sendEmail = async (email: string, firstName: string, lastName: string, dietary_requirements: string): Promise<void> => {
   try {
@@ -37,13 +75,7 @@ export const sendEmail = async (email: string, firstName: string, lastName: stri
             Variables: {
               first_name: firstName,
               last_name: lastName,
-              dietary_requirements: dietary_requirements,
-              date: date.toLocaleDateString('en-GB', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              })
+              dietary_requirements: dietary_requirements
             },
             TemplateID: TemplateID,
             TemplateLanguage: true,

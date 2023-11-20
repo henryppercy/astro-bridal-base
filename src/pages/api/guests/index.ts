@@ -3,7 +3,7 @@ import { app } from "@firebase/server";
 import { getFirestore } from "firebase-admin/firestore";
 import type { Guest } from "@lib/types";
 import { validateGuests } from "@lib/utils";
-import { sendEmail } from "@lib/email/mailer";
+import { sendEmail, sendNotComingEmail } from "@lib/email/mailer";
 
 export const POST: APIRoute = async ({ request, redirect }) => {
   const guests: Guest[] = await request.json();
@@ -28,14 +28,24 @@ export const POST: APIRoute = async ({ request, redirect }) => {
     );
     await Promise.all(addGuestsPromises);
 
-    const sendEmailPromises = validatedGuests.map(validatedGuest => 
-      sendEmail(
-        validatedGuest.guest.email,
-        validatedGuest.guest.first_name,
-        validatedGuest.guest.last_name,
-        validatedGuest.guest.dietary_requirements ?? ''
-      )
-    );
+    const sendEmailPromises = validatedGuests.map(validatedGuest => {
+      if (validatedGuest.guest.rsvp === 'no') {
+        return sendNotComingEmail(
+          validatedGuest.guest.email,
+          validatedGuest.guest.first_name,
+          validatedGuest.guest.last_name
+        )
+      }
+
+      if (validatedGuest.guest.rsvp === 'yes') {
+        return sendEmail(
+          validatedGuest.guest.email,
+          validatedGuest.guest.first_name,
+          validatedGuest.guest.last_name,
+          validatedGuest.guest.dietary_requirements ?? ''
+        )
+      }
+    });
     await Promise.all(sendEmailPromises);
 
   } catch (error) {

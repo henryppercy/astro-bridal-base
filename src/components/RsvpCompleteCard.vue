@@ -1,8 +1,9 @@
 <template>
   <div class="bg-pink rounded-3xl py-4 px-6 md:px-10 md:py-5 flex flex-col md:flex-row justify-between max-md:gap-4">
     <div v-if="!requestPending" >
-      <h2 class="uppercase text-white tracking-widest md:text-lg">{{ guest.first_name }} {{ guest.last_name }}</h2>
+      <h2 class="uppercase text-white tracking-widest md:text-lg">{{ guest.first_name }} {{ guest.last_name }} "{{ guest.rsvp === 'yes' ? "I'll be there!" : "Sorry, I can't make it"}}"</h2>
       <p class="uppercase text-white tracking-widest md:text-lg">{{  guest.email }}</p>
+      
       <p class="uppercase text-white tracking-widest md:text-lg">{{ guest.dietary_requirements ? guest.dietary_requirements : 'No Dietary Requirements' }}</p>
     </div>
     <div v-if="!requestPending" class="flex gap-4 md:h-10">

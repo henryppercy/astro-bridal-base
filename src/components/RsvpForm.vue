@@ -14,17 +14,14 @@
       </div>
     </div>
   </SlideIn>
-  <IntroHeader class="max-md:hidden">
-    <span>{{ title }}</span>
-  </IntroHeader>
-  <header class="md:hidden flex items-end justify-center px-8 md:px-12">
-    <h1 class="font-serif uppercase text-[4.5rem] text-pink text-center tracking-tighter leading-[0.8] w-fit pt-12 pb-2">
-      {{ mobileTitle }}
+  <header class="flex items-end justify-center pb-8 px-8 py-12 md:px-12 z-20">
+    <h1 class="font-serif uppercase text-[4.5rem] md:text-[6rem] lg:text-[7.5rem] text-pink text-center tracking-tighter leading-[0.8] w-fit py-1 pt-12 pb-2">
+      Guest Details
     </h1>
   </header> 
-  <IntroMain>
+  <div class="pt-8 px-4 lg:px-12 mx-auto">
     <SlideIn>
-      <form ref="guestFormData" v-if="showForm" @submit.prevent="submitForm" class="flex flex-col md:flex-row gap-5 pb-8 md:pb-20 mx-auto md:px-16 lg:px-20">
+      <form ref="guestFormData" v-if="showForm" @submit.prevent="submitForm" class="flex flex-col md:flex-row gap-5">
         <div class="space-y-4 md:space-y-8 pb-16 w-full">
           <template v-for="(guest, index) in guests" :key="index">
             <RsvpField 
@@ -57,21 +54,7 @@
         </div>
       </form>
     </SlideIn>
-  </IntroMain>
-  <nav class="fixed flex bottom-0 w-full px-6 py-3 md:py-6 md:px-12 max-md:bg-white">
-    <ul class="flex gap-5 md:gap-8 w-full justify-between">
-      <li class="font-sans uppercase text-xs tracking-[0.3rem] text-black">
-        <a href="/">
-          Back
-        </a>
-      </li>
-      <li class="font-sans uppercase text-xs tracking-[0.3rem] text-black">
-        <a href="/help">
-          Help
-        </a>
-      </li>
-    </ul>
-  </nav>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -88,18 +71,8 @@ import AppButton from './AppButton.vue';
 
 onBeforeMount(() => title.value = '');
 
-onMounted(() => {
-  setTimeout(async () => {
-    await changeMobileTitle('Guest Details')
-    changeTitle('Nice, Just Need a Few More Details');
-    showForm.value = true;
-  }, 1);
-});
-
 onBeforeUnmount(() => {
   setTimeout(async () => {
-    changeMobileTitle('Guest Details')
-    changeTitle('Nice, Just Need a Few More Details');
     showForm.value = true;
   }, 1);
 })
@@ -112,21 +85,23 @@ const guests = ref<GuestFormField[]>([
       last_name: '',
       email: '',
       confirm_email: '',
-      dietary_requirements: ''
+      dietary_requirements: '',
+      rsvp: ''
     },
     data: {
       first_name: '',
       last_name: '',
       email: '',
       confirm_email: '',
-      dietary_requirements: ''
+      dietary_requirements: '',
+      rsvp: ''
     },
     completed: false
   }
 ]);
 
 const guestFormData = ref<null | HTMLFormElement>(null);
-const showForm = ref(false);
+const showForm = ref(true);
 const requestPending = ref(false);
 const guestsCompleted = computed(() => guests.value.every((guest) => guest.completed));
 const error = ref(false);
@@ -138,7 +113,8 @@ const clearErrors = () => {
       last_name: '',
       email: '',
       confirm_email: '',
-      dietary_requirements: ''
+      dietary_requirements: '',
+      rsvp: ''
     };
   });
 };
@@ -149,7 +125,8 @@ const clearGuestError = (guestNumber: number) => {
     last_name: '',
     email: '',
     confirm_email: '',
-    dietary_requirements: ''
+    dietary_requirements: '',
+    rsvp: ''
   };
 };
 
@@ -241,7 +218,11 @@ const submitForm = async (e: Event) => {
       requestPending.value = false;
 
       console.log('Successfully submitted');
-      window.location.href = response.url;
+      const html = document.querySelector('html');
+      await html?.classList.add('!bg-pink');
+      setTimeout(() => {
+        window.location.href = response.url;
+      }, 700);
     }
   } catch (error) {
     console.error('There was an error:', error);
