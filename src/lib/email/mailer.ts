@@ -32,7 +32,7 @@ export const sendNotComingEmail = async (email: string, firstName: string, lastN
             },
             To: [
               {
-                Email: import.meta.env.TEST_EMAIL, // TODO: Replace with user email
+                Email: email,
                 Name: `${firstName} ${lastName}`
               }
             ],
@@ -68,7 +68,7 @@ export const sendEmail = async (email: string, firstName: string, lastName: stri
             },
             To: [
               {
-                Email: import.meta.env.TEST_EMAIL, // TODO: Replace with user email
+                Email: email,
                 Name: `${firstName} ${lastName}`
               }
             ],
