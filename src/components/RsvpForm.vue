@@ -58,13 +58,12 @@
 </template>
 
 <script setup lang="ts">
-import IntroMain from './IntroMain.vue';
-import IntroHeader from '@components/IntroHeader.vue';
+
 import SlideIn from '@components/SlideIn.vue';
 import RsvpField from '@components/RsvpField.vue';
-import { title, mobileTitle } from '@stores/introStore';
-import { changeTitle, changeMobileTitle, createNewGuestField, formatZodValidationError, validateGuests } from '@lib/utils';
-import { onMounted, onBeforeMount, onBeforeUnmount, ref, computed } from 'vue';
+import { title } from '@stores/introStore';
+import { createNewGuestField, formatZodValidationError, validateGuests } from '@lib/utils';
+import { onBeforeMount, onBeforeUnmount, ref, computed } from 'vue';
 import type { Guest, GuestFormField, IndexedValidationError, IndexedGuest } from '@lib/types';
 import RsvpCompleteCard from './RsvpCompleteCard.vue';
 import AppButton from './AppButton.vue';

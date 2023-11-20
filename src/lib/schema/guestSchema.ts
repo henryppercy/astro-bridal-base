@@ -7,14 +7,14 @@ export const guestSchema = z.object({
     .regex(/^[a-zA-Z]+$/, { message: "Your first name should only contain letters" })
     .max(50, { message: "Your first name should be shorter than 50 characters" })
     .min(2, { message: "Your first name should have at least 2 characters" })
-    .transform((value) => value.charAt(0).toUpperCase() + value.slice(1)),
+    .transform((value) => value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()),
   last_name: z
     .string({ required_error: "Please enter your last name" })
     .trim()
     .regex(/^[a-zA-Z]+$/, { message: "Your last name should only contain letters" })
     .min(2, { message: "Your last name should have at least 2 characters" })
     .max(50, { message: "Your last name should be shorter than 50 characters" })
-    .transform((value) => value.charAt(0).toUpperCase() + value.slice(1)),
+    .transform((value) => value.charAt(0).toUpperCase() + value.slice(1).toLowerCase()),
   email: z
     .string({ required_error: "Please enter your email address" })
     .trim()
@@ -29,6 +29,7 @@ export const guestSchema = z.object({
     .string()
     .trim()
     .max(50, { message: "Dietary requirements should be under 50 characters" })
+    .transform((value) => value.charAt(0).toUpperCase() + value.slice(1).toLowerCase())
     .optional(),
   rsvp: z
     .string({ required_error: "Please let us know if you can make it" })
