@@ -218,7 +218,11 @@ const submitForm = async (e: Event) => {
       requestPending.value = false;
 
       console.log('Successfully submitted');
-      window.location.href = response.url;
+      const html = document.querySelector('html');
+      await html?.classList.add('!bg-pink');
+      setTimeout(() => {
+        window.location.href = response.url;
+      }, 700);
     }
   } catch (error) {
     console.error('There was an error:', error);
