@@ -1,5 +1,42 @@
 ---
 import StaticLayout from '@layouts/StaticLayout.astro';
+import { Image } from 'astro:assets';
+
+import img_1 from '../../images/1.jpg';
+import img_3 from '../../images/3.jpg';
+import img_4 from '../../images/4.jpg';
+import img_5 from '../../images/5.jpg';
+import img_6 from '../../images/6.jpg';
+import img_7 from '../../images/7.jpg';
+import img_8 from '../../images/8.jpg';
+import img_9 from '../../images/9.jpg';
+import img_10 from '../../images/10.jpg';
+import img_11 from '../../images/11.jpg';
+import img_13 from '../../images/13.jpg';
+import img_14 from '../../images/14.jpg';
+import img_15 from '../../images/15.jpg';
+import img_16 from '../../images/16.jpg';
+import img_17 from '../../images/17.jpg';
+import img_18 from '../../images/18.jpg';
+import img_19 from '../../images/19.jpg';
+import img_20 from '../../images/20.jpg';
+import img_21 from '../../images/21.jpg';
+import img_22 from '../../images/22.jpg';
+import img_23 from '../../images/23.jpg';
+import img_24 from '../../images/24.jpg';
+import img_25 from '../../images/25.jpg';
+import img_26 from '../../images/26.jpg';
+import img_27 from '../../images/27.jpg';
+import img_28 from '../../images/28.jpg';
+import img_29 from '../../images/29.jpg';
+import img_30 from '../../images/30.jpg';
+import img_31 from '../../images/31.jpg';
+import img_32 from '../../images/32.jpg';
+import img_33 from '../../images/33.jpg';
+
+
+const images = [img_1, img_3, img_4, img_5, img_6, img_7, img_8, img_9, img_10, img_11, img_13, img_14, img_15, img_16, img_17, img_18, img_19, img_20, img_21, img_22, img_23, img_24, img_25, img_26, img_27, img_28, img_29, img_30, img_31, img_32, img_33];
+images.sort(() => Math.random() - 0.5);
 ---
 
 <StaticLayout title="Dress Code">
@@ -17,30 +54,44 @@ import StaticLayout from '@layouts/StaticLayout.astro';
         </p>
       </div>
       <section class="flex justify-center items-center pb-6">
-        <div class="relative flex items-center gap-6 snap-x snap-mandatory overflow-x-auto hide-scrollbar h-full">
-          <div class="snap-center shrink-0">
-            <div class="shrink-0 w-1"></div>
-          </div>
-          <div class="snap-center shrink-0 w-80 h-[450px] md:h-[350px]">
-            <img class="w-full h-full object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1569924995250-4e0efa9bfb2b?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
-          </div>
-          <div class="snap-center shrink-0 w-80 h-[450px] md:h-[350px]">
-            <img class="w-full h-full object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1541532713592-79a0317b6b77?q=80&w=3088&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
-          </div>
-          <div class="snap-center shrink-0 w-80 h-[450px] md:h-[350px]">
-            <img class="w-full h-full object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1655546836727-bec4387b02e2?q=80&w=3135&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
-          </div>
-          <div class="snap-center shrink-0 w-80 h-[450px] md:h-[350px]">
-            <img class="w-full h-full object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1517263904808-5dc91e3e7044?q=80&w=3088&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
-          </div>
-          <div class="snap-center shrink-0 w-80 h-[450px] md:h-[350px]">
-            <img class="w-full h-full object-cover rounded-lg shadow-xl" src="https://images.unsplash.com/photo-1546472585-b51e68338cb3?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D">
-          </div>
+        <div id="carouselContainer" class="relative flex items-center overflow-x-auto hide-scrollbar h-full">
+          {images.map(image => {
+            return (
+              <div class="inline-flex">
+                <div class="shrink-0 w-80 h-[450px] md:h-[350px]">
+                  <Image class="w-full h-full object-cover rounded-lg shadow-xl" src={image} alt="Dress like this person" height="450"/>
+                </div>
+                <div class="shrink-0 w-6"></div>
+              </div>
+            );
+          })}
         </div>
       </section>
     </main>
   </div>
 </StaticLayout>
+
+<script>
+  const scrollInterval = 30;
+  const stepSize = 3;
+  const largeScreenWidth = 992;
+
+  window.onload = function() {
+    const carousel = document.getElementById('carouselContainer');
+
+    if (window.innerWidth >= largeScreenWidth) {
+      setInterval(() => {
+        carousel.scrollBy({ left: stepSize, behavior: 'smooth' });
+
+        const firstImage = carousel.children[0];
+        if (firstImage.getBoundingClientRect().right < 0) {
+          carousel.appendChild(firstImage);
+          carousel.scrollLeft -= firstImage.offsetWidth;
+        }
+      }, scrollInterval);
+    }
+  };
+</script>
 
 <style>
 .hide-scrollbar::-webkit-scrollbar {
