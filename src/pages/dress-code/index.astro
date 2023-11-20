@@ -74,19 +74,22 @@ images.sort(() => Math.random() - 0.5);
 <script>
   const scrollInterval = 30;
   const stepSize = 3;
+  const largeScreenWidth = 992;
 
   window.onload = function() {
     const carousel = document.getElementById('carouselContainer');
 
-    setInterval(() => {
-      carousel.scrollBy({ left: stepSize, behavior: 'smooth' });
+    if (window.innerWidth >= largeScreenWidth) {
+      setInterval(() => {
+        carousel.scrollBy({ left: stepSize, behavior: 'smooth' });
 
-      const firstImage = carousel.children[0];
-      if (firstImage.getBoundingClientRect().right < 0) {
-        carousel.appendChild(firstImage);
-        carousel.scrollLeft -= firstImage.offsetWidth;
-      }
-    }, scrollInterval);
+        const firstImage = carousel.children[0];
+        if (firstImage.getBoundingClientRect().right < 0) {
+          carousel.appendChild(firstImage);
+          carousel.scrollLeft -= firstImage.offsetWidth;
+        }
+      }, scrollInterval);
+    }
   };
 </script>
 
