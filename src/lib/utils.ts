@@ -27,6 +27,7 @@ export const generateGuestArray = (formData: FormData): Guest[] => {
       email: formData.get(`email_${guestNumber}`) as string,
       confirm_email: formData.get(`confirm_email_${guestNumber}`) as string,
       dietary_requirements: formData.get(`dietary_requirements_${guestNumber}`) as string | undefined,
+      rsvp: formData.get(`rsvp_${guestNumber}`) as string
     };
     guests.push(guest);
   }
@@ -62,17 +63,20 @@ export const formatZodValidationError = (error: IndexedValidationError) => {
     last_name: '',
     email: '',
     confirm_email: '',
-    dietary_requirements: ''
+    dietary_requirements: '',
+    rsvp: ''
   });
 }
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-export const removeCharacter = async () => {
+export const removeCharacter = async (removeAll = false) => {
   let removeLetterTime = removeSentenceTime/title.value.length;
   if (title.value.length > longTitleLength) removeLetterTime = removeLetterTimeFast;
+  
+  const whileNumber = removeAll ? 0 : 1;
 
-  while (title.value.length > 0) {
+  while (title.value.length > whileNumber) {
     title.value = title.value.slice(0, -1);
     if (title.value.length <= slowCharacters) removeLetterTime = removeLetterTimeSlow;
     await sleep(removeLetterTime);
@@ -134,5 +138,6 @@ export const createEmptyGuest = () => ({
   last_name: '',
   email: '',
   confirm_email: '',
-  dietary_requirements: ''
+  dietary_requirements: '',
+  rsvp: ''
 });

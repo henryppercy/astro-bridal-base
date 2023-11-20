@@ -26,13 +26,13 @@ export const steps: Steps = {
   },
   1: {
     step: 1,
-    title: 'Hello',
+    title: 'ello',
     param: 'hello',
     buttons: [{ text: 'Hey', nextStep: 2 }]
   },
   2: {
     step: 2,
-    title: 'Harriet & George Are Tying the Knot',
+    title: 'arriet & George Are Tying the Knot',
     param: 'tying-the-Knot',
     buttons: [
       { text: 'Finally, It\'s About Time He Asked', nextStep: 3 },
@@ -41,30 +41,8 @@ export const steps: Steps = {
   },
   3: {
     step: 3,
-    title: 'Are you coming?',
-    param: 'Are-you-coming',
-    buttons: [
-      { text: 'Yes!', nextStep: 5 },
-      { text: 'Tell me More', nextStep: 6 },
-      { text: 'Nah', nextStep: 4 }
-    ]
-  },
-  4: {
-    step: 4,
-    title: 'We\'ll Miss Ya',
-    param: 'well-miss-ya',
-    buttons: [{ text: 'Actually, I\'ve Changed My Mind', nextStep: 3 }]
-  },
-  5: {
-    step: 5,
-    title: 'Nice, Just Need a Few More Things',
-    param: 'nice-just-need-a-few-more-things',
-    buttons: []
-  },
-  6: {
-    step: 6,
     title: '',
     param: '',
     buttons: []
-  }
+  },
 };
