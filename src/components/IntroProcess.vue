@@ -31,7 +31,7 @@ import SlideIn from '@components/SlideIn.vue';
 import { navigate } from 'astro:transitions/client';
 
 onBeforeMount(() => title.value = 'H&G');
-onBeforeUnmount(() => stepHistory.value = []);
+onBeforeUnmount(() => title.value = 'H&G');
 
 onMounted(() => {
   setTimeout(() => {
