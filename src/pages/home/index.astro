@@ -27,3 +27,39 @@ import StaticLayout from '@layouts/StaticLayout.astro';
     </svg>
   </main>
 </StaticLayout>
+
+<style>
+  @keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px); /* Elements start 20px below their final position */
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+main > p, main > svg {
+    animation-name: fadeInUp;
+    animation-duration: 1s; /* Adjust the duration as needed */
+    animation-fill-mode: both; /* Keeps the element in its final state after the animation ends */
+}
+
+main > p:nth-child(1) {
+    animation-delay: 0.8s; /* Starts half a second after the page loads */
+}
+
+main > p:nth-child(2) {
+    animation-delay: 0.6s; /* Starts 1 second after the page loads */
+}
+
+main > p:nth-child(3) {
+    animation-delay: 0.4s; /* Starts 1.5 seconds after the page loads */
+}
+
+main > p:nth-child(4) {
+    animation-delay: 0.2s; /* Starts 2 seconds after the page loads */
+}
+
+</style>

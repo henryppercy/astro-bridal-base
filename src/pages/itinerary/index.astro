@@ -42,11 +42,11 @@ const timelineEntries = [
 ---
 
 <StaticLayout title="Itineray" >
-  <div class="pb-12 px-6 lg:py-6 space-y-6 md:grid grid-cols-2 justify-items-center items-center md:h-full gap-10">
-    <header class="justify-self-start max-md:fixed max-md:bg-white pt-12 z-20 w-11/12">
+  <div class="h-full py-12 px-6 uppercase max-md:space-y-10 md:grid grid-cols-2 justify-items-center items-center gap-10">
+    <header class="justify-self-start mt-5 z-20">
       <h1 class="font-serif text-pink text-7xl md:text-8xl lg:text-9xl uppercase text-center tracking-tighter pt-6">Itinerary</h1>
     </header>
-    <main class="text-black uppercase text-xs tracking-wide h-full w-fit md:overflow-y-scroll hide-scrollbar lg:pb-10 max-md:pt-32">
+    <main class="text-black uppercase text-xs tracking-wide h-full w-fit md:overflow-y-scroll hide-scrollbar lg:pb-10">
       {timelineEntries.map((entry, index) => (
         <article 
           class={`${index === timelineEntries.length - 1 ? 'before:h-1/2' : 'before:h-full'} relative grid before:content-[''] ml-12 before:block before:absolute before:left-[-25px] before:border-l before:border-pink pt-3 md:pt-6`}

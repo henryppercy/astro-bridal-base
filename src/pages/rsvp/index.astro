@@ -1,10 +1,10 @@
 ---
-import DefaultLayout from '@layouts/DefaultLayout.astro';
+import StaticLayout from '@layouts/StaticLayout.astro';
 import RsvpForm from '@components/RsvpForm.vue';
 ---
 
-<DefaultLayout title="RSVP">
+<StaticLayout title="RSVP">
   <div class="h-screen">
     <RsvpForm client:only="vue" />
   </div>
-</DefaultLayout>
+</StaticLayout>
