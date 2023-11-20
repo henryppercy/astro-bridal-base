@@ -41,23 +41,8 @@ export const steps: Steps = {
   },
   3: {
     step: 3,
-    title: 'Are you coming?',
-    param: 'Are-you-coming',
-    buttons: [
-      { text: 'RSVP', nextStep: 4 },
-      { text: 'Tell me More', nextStep: 5 },
-    ]
-  },
-  4: {
-    step: 4,
-    title: 'Nice, Just Need a Few More Things',
-    param: 'nice-just-need-a-few-more-things',
-    buttons: []
-  },
-  5: {
-    step: 5,
     title: '',
     param: '',
     buttons: []
-  }
+  },
 };
