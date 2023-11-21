@@ -61,14 +61,11 @@
 
 import SlideIn from '@components/SlideIn.vue';
 import RsvpField from '@components/RsvpField.vue';
-import { title } from '@stores/introStore';
 import { createNewGuestField, formatZodValidationError, validateGuests } from '@lib/utils';
 import { onBeforeMount, onBeforeUnmount, ref, computed } from 'vue';
 import type { Guest, GuestFormField, IndexedValidationError, IndexedGuest } from '@lib/types';
 import RsvpCompleteCard from './RsvpCompleteCard.vue';
 import AppButton from './AppButton.vue';
-
-onBeforeMount(() => title.value = '');
 
 onBeforeUnmount(() => {
   setTimeout(async () => {
