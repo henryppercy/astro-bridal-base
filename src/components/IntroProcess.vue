@@ -6,7 +6,7 @@
     <IntroMain class="gap-4 md:gap-10 flex items-start justify-evenly flex-wrap">
       <SlideIn>
         <div v-if="showButtons" class="max-md:w-full" v-for="button in step.buttons" :key="button.text">
-          <AppButton @click="handleChangeStep(steps[button.nextStep].title, button.nextStep)" :disabled="updating">
+          <AppButton @click.once="handleChangeStep(steps[button.nextStep].title, button.nextStep)" :disabled="updating">
             {{ button.text }}
           </AppButton>
         </div>
@@ -103,11 +103,9 @@ const steps: Steps = {
   },
 };
 const step = ref<Step>({ step: 0, title: 'H&G', param: 'H&G', buttons: [] });
-const stepHistory = ref<Step[]>([]);
 const showButtons = ref(true);
 
-const changeStep = (newTitle: string, nextStep: number, addToHistory: boolean = true) => {
-  if (addToHistory && step.value.title !== 'H&G') stepHistory.value.push(step.value);
+const changeStep = (newTitle: string, nextStep: number) => {
   let removeSpeed = removeSentenceTime / title.value.length;
 
   if (title.value.length > longTitleLength) removeSpeed = removeLetterTimeFast;
