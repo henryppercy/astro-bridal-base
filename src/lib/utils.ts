@@ -1,12 +1,6 @@
 import type { Guest, IndexedValidationError, IndexedGuest } from '@lib/types';
 import { guestSchema } from "@lib/schema/guestSchema";
 
-import { 
-  title, mobileTitle, updating, addLetterTime, delayBeforeTypingIn, 
-  longTitleLength, removeLetterTimeFast, removeLetterTimeSlow, 
-  removeSentenceTime, slowCharacters 
-} from '@stores/introStore';
-
 export const generateGuestArray = (formData: FormData): Guest[] => {
   const guests: Guest[] = [];
   const formDataEntries = [...formData.entries()];
@@ -67,62 +61,6 @@ export const formatZodValidationError = (error: IndexedValidationError) => {
     rsvp: ''
   });
 }
-
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
-export const removeCharacter = async (removeAll = false) => {
-  let removeLetterTime = removeSentenceTime/title.value.length;
-  if (title.value.length > longTitleLength) removeLetterTime = removeLetterTimeFast;
-  
-  const whileNumber = removeAll ? 0 : 1;
-
-  while (title.value.length > whileNumber) {
-    title.value = title.value.slice(0, -1);
-    if (title.value.length <= slowCharacters) removeLetterTime = removeLetterTimeSlow;
-    await sleep(removeLetterTime);
-  }
-  await sleep(delayBeforeTypingIn); // pause before typing in
-};
-
-export const removeMobileCharacter = async () => {
-  let removeLetterTime = removeSentenceTime/mobileTitle.value.length;
-  if (mobileTitle.value.length > longTitleLength) removeLetterTime = removeLetterTimeFast;
-
-  while (mobileTitle.value.length > 0) {
-    mobileTitle.value = mobileTitle.value.slice(0, -1);
-    if (mobileTitle.value.length <= slowCharacters) removeLetterTime = removeLetterTimeSlow;
-    await sleep(removeLetterTime);
-  }
-  await sleep(delayBeforeTypingIn); // pause before typing in
-};
-
-export const addCharacter = async (str: string) => {
-  for (let i = 0; i < str.length; i++) {
-    title.value += str.charAt(i);
-    await sleep(addLetterTime);
-  }
-};
-
-export const addMobileCharacter = async (str: string) => {
-  for (let i = 0; i < str.length; i++) {
-    mobileTitle.value += str.charAt(i);
-    await sleep(addLetterTime);
-  }
-};
-
-export const changeTitle = async (newTitle: string) => {
-  updating.value = true;
-  await removeCharacter();
-  await addCharacter(newTitle);
-  updating.value = false;
-};
-
-export const changeMobileTitle = async (newTitle: string) => {
-  updating.value = true;
-  await removeMobileCharacter();
-  await addMobileCharacter(newTitle);
-  updating.value = false;
-};
 
 export const createNewGuestField = (guestLen: number) => {
   return {
