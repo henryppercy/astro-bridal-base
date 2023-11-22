@@ -72,25 +72,34 @@ images.sort(() => Math.random() - 0.5);
 </StaticLayout>
 
 <script>
-  const scrollInterval = 30;
-  const stepSize = 3;
-  const largeScreenWidth = 992;
+const scrollInterval = 30;
+const stepSize = 3;
+const largeScreenWidth = 992;
 
-  window.onload = function() {
-    const carousel = document.getElementById('carouselContainer');
-
-    if (window.innerWidth >= largeScreenWidth) {
-      setInterval(() => {
-        carousel.scrollBy({ left: stepSize, behavior: 'smooth' });
-
-        const firstImage = carousel.children[0];
-        if (firstImage.getBoundingClientRect().right < 0) {
-          carousel.appendChild(firstImage);
-          carousel.scrollLeft -= firstImage.offsetWidth;
-        }
-      }, scrollInterval);
-    }
+function initializeCarousel() {
+  const carousel = document.getElementById('carouselContainer');
+  
+  if (!carousel) {
+    console.log('No carousel found');
+    return;
   };
+
+  if (window.innerWidth >= largeScreenWidth) {
+    setInterval(() => {
+      carousel.scrollBy({ left: stepSize, behavior: 'smooth' });
+
+      const firstImage = carousel.children[0];
+      if (firstImage.getBoundingClientRect().right < 0) {
+        carousel.appendChild(firstImage);
+        carousel.scrollLeft -= firstImage.offsetWidth;
+      }
+    }, scrollInterval);
+  }
+}
+
+window.onload = () => {
+  initializeCarousel();
+};
 </script>
 
 <style>
