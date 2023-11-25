@@ -43,8 +43,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { defineProps } from 'vue';
-import type { Guest } from '../lib/types';
+import type { Guest } from '@lib/types';
 
 const props = defineProps<{
   guests: Guest[];
