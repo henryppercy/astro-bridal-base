@@ -3,9 +3,11 @@ import RsvpTable from '@components/RsvpTable.vue'
 import type { Guest } from '@lib/types'
 import { sortGuestsAlphabeticallyAZ, sortGuestsByRsvp, sortGuestsByDietaryRequirements } from '@lib/utils'
 
+const url = Astro.url.origin;
+
 const getGuests = async () => {
   try {
-    const response = await fetch('http://localhost:4321/api/guests');
+    const response = await fetch(`${url}/api/guests`);
 
     if (!response.ok) {
       throw new Error('Network response was not successful');
