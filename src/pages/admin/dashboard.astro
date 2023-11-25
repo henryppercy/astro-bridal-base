@@ -1,0 +1,148 @@
+---
+import RsvpTable from '@components/RsvpTable.vue'
+import type { Guest } from '@lib/types'
+import { sortGuestsAlphabeticallyAZ, sortGuestsByRsvp, sortGuestsByDietaryRequirements } from '@lib/utils'
+
+const getGuests = async () => {
+  try {
+    const response = await fetch('http://localhost:4321/api/guests');
+
+    if (!response.ok) {
+      throw new Error('Network response was not successful');
+    }
+
+    return await response.json();
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+const guests: Guest[] = await getGuests();
+
+const guestsAZ = sortGuestsAlphabeticallyAZ(guests, 'az');
+const guestsZA = sortGuestsAlphabeticallyAZ(guests, 'za');
+
+const guestsAttending = sortGuestsByRsvp(guests, 'yes');
+const guestsNotAttending = sortGuestsByRsvp(guests, 'no');
+
+const guestsDietaryRequirements = sortGuestsByDietaryRequirements(guests, 'requirements');
+const guestsNoDietaryRequirements = sortGuestsByDietaryRequirements(guests, 'noRequirements');
+
+const guestsDietary = guests.filter(guest => guest.dietary_requirements !== '');
+
+const totalInvited = 70;
+const totalAttending = guests.filter(guest => guest.rsvp === 'yes').length;
+const totalDeclined = guests.filter(guest => guest.rsvp === 'no').length;
+const totalResponded = totalAttending + totalDeclined;
+const percentageResponded = Math.round((totalResponded / totalInvited) * 100);
+const percentageAccepted = Math.round((totalAttending / totalResponded) * 100);
+const percentageDeclined = Math.round((totalDeclined / totalResponded) * 100);
+const percentageDietary = Math.round((guestsDietary.length / totalResponded) * 100);
+---
+
+<!doctype html>
+<html lang="en" class="bg-[#111010]">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="George and Hattie's wedding portal." />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<meta name="generator" content={Astro.generator} />
+		<title>G&H | Admin</title>
+	</head>
+
+	<body class="px-3 md:p-5 lg:p-10 container mx-auto max-w-3xl space-y-10 mb-10 mt-10">
+    <h1 class="mb-4 text-4xl font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl text-white">Harriet and George's <span class="text-pink">Dream Team</span></h1>
+    <p class="mb-6 text-lg lg:text-xl text-stone-400">{`This page displays an overview of Harriet and George's wedding, showing a breakdown of the ${totalResponded} guests who have responded so far.`}</p>
+    
+    <section class="space-y-4">
+      <aside>
+        <div class="flex justify-between mb-1">
+          <span class="font-medium text-stone-100 uppercase text-sm">Responded</span>
+          <span class="text-sm font-medium text-stone-100">{percentageResponded}%</span>
+        </div>
+        <div class="w-full rounded-full h-2.5 bg-pink/20">
+          <div class="bg-pink h-2.5 rounded-full" style={`width: ${percentageResponded}%`}></div>
+        </div>
+      </aside>
+      <aside>
+        <div class="flex justify-between mb-1">
+          <span class="font-medium text-stone-100 uppercase text-sm">Accepted</span>
+          <span class="text-sm font-medium text-stone-100">{percentageAccepted}%</span>
+        </div>
+        <div class="w-full rounded-full h-2.5 bg-pink/20">
+          <div class="bg-pink h-2.5 rounded-full" style={`width: ${percentageAccepted}%`}></div>
+        </div>
+      </aside>
+      <aside>
+        <div class="flex justify-between mb-1">
+          <span class="font-medium text-stone-100 uppercase text-sm">Declined</span>
+          <span class="text-sm font-medium text-stone-100">{percentageDeclined}%</span>
+        </div>
+        <div class="w-full rounded-full h-2.5 bg-pink/20">
+          <div class="bg-pink h-2.5 rounded-full" style={`width: ${percentageDeclined}%`}></div>
+        </div>
+      </aside>
+      <aside>
+        <div class="flex justify-between mb-1">
+          <span class="font-medium text-stone-100 uppercase text-sm">Dietary Requirements</span>
+          <span class="text-sm font-medium text-stone-100">{percentageDietary}%</span>
+        </div>
+        <div class="w-full rounded-full h-2.5 bg-pink/20">
+          <div class="bg-pink h-2.5 rounded-full" style={`width: ${percentageDietary}%`}></div>
+        </div>
+      </aside>
+    </section>
+
+    <div class="relative overflow-x-auto shadow-md rounded-lg">  
+      <RsvpTable
+        guests={guestsAZ}
+        guestsAZ={guestsAZ}
+        guestsZA={guestsZA}
+        guestsAttending={guestsAttending}
+        guestsNotAttending={guestsNotAttending}
+        guestsRequirements={guestsDietaryRequirements}
+        guestsNoRequirements={guestsNoDietaryRequirements}
+        client:only="vue"
+      />
+    </div>
+
+    <section class="flex justify-around items-center py-5 bg-stone-700 rounded-lg">
+      <div class="flex flex-col justify-center items-center">
+        <p class="text-stone-100 text-3xl font-extrabold">{totalInvited}</p>
+        <p class="text-stone-400">Invited</p>
+      </div>
+      <div class="flex flex-col justify-center items-center">
+        <p class="text-stone-100 text-3xl font-extrabold">{totalResponded}</p>
+        <p class="text-stone-400">Responded</p>
+      </div>
+      <div class="flex flex-col justify-center items-center">
+        <p class="text-stone-100 text-3xl font-extrabold">{totalAttending}</p>
+        <p class="text-stone-400">Attending</p>
+      </div>
+      <div class="flex flex-col justify-center items-center">
+        <p class="text-stone-100 text-3xl font-extrabold">{totalDeclined}</p>
+        <p class="text-stone-400">Declined</p>
+      </div>
+    </section>
+
+    <footer class="rounded-lg shadow bg-stone-800">
+      <div class="w-full p-4 flex items-center justify-between">
+        <span class="text-xs font-semibold text-stone-100 uppercase">Harriet & George</span>
+        <ul class="flex flex-wrap items-center gap-x-3 md:gap-x-5 text-sm font-medium text-stone-100">
+          <li>
+            <a href="/home" class="hover:underline">Home</a>
+          </li>
+          <li>
+            <a href="https://app.mailjet.com/dashboard" target="_blank" class="hover:underline">Mailjet</a>
+          </li>
+          <li>
+            <a href="https://sso.godaddy.com/login?realm=pass&app=email" target="_blank" class="hover:underline">Outlook</a>
+          </li>
+        </ul>
+      </div>
+    </footer>
+	</body>
+</html>

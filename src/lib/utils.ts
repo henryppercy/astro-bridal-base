@@ -79,3 +79,68 @@ export const createEmptyGuest = () => ({
   dietary_requirements: '',
   rsvp: ''
 });
+
+export function sortGuestsAlphabeticallyAZ(guests: Guest[], type: 'az' | 'za') {
+  return guests.reduce((sortedArray: Guest[], currentGuest: Guest): Guest[] => {
+    let insertIndex;
+    if (type === 'az') {
+      insertIndex = sortedArray.findIndex(
+        item => currentGuest.last_name.localeCompare(item.last_name) < 0
+      );
+    } else {
+      insertIndex = sortedArray.findIndex(
+        item => currentGuest.last_name.localeCompare(item.last_name) > 0
+      );
+    }
+
+    if (insertIndex === -1) {
+      sortedArray.push(currentGuest);
+    } else {
+      sortedArray.splice(insertIndex, 0, currentGuest);
+    }
+
+    return sortedArray;
+  }, []);
+}
+
+export function sortGuestsByRsvp(guests: Guest[], type: 'yes' | 'no') {
+  return guests.slice().sort((a: Guest, b: Guest) => {
+    if (type === 'yes') {
+      if (a.rsvp === 'yes' && b.rsvp !== 'yes') {
+        return -1;
+      } else if (a.rsvp !== 'yes' && b.rsvp === 'yes') {
+        return 1;
+      }
+    } else {
+      if (a.rsvp === 'no' && b.rsvp !== 'no') {
+        return -1;
+      } else if (a.rsvp !== 'no' && b.rsvp === 'no') {
+        return 1;
+      }
+    }
+    return 0;
+  });
+}
+
+export function sortGuestsByDietaryRequirements(guests: Guest[], type: 'requirements' | 'noRequirements') {
+  return guests.reduce((sortedArray: Guest[], currentGuest: Guest): Guest[] => {
+    let insertIndex;
+    if (type === 'requirements') {
+      insertIndex = sortedArray.findIndex(
+        item => item.dietary_requirements === '' && currentGuest.dietary_requirements !== ''
+      );
+    } else {
+      insertIndex = sortedArray.findIndex(
+        item => item.dietary_requirements !== '' && currentGuest.dietary_requirements === ''
+      );
+    }
+
+    if (insertIndex === -1) {
+      sortedArray.push(currentGuest);
+    } else {
+      sortedArray.splice(insertIndex, 0, currentGuest);
+    }
+
+    return sortedArray;
+  }, []);
+}
