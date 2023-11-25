@@ -55,7 +55,6 @@ const props = defineProps<{
   guestsNoRequirements: Guest[];
 }>();
 
-
 const sortAZ = ref('az');
 const sortRsvp = ref('yes');
 const sortDiet = ref('requirements');
