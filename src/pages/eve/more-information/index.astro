@@ -1,0 +1,51 @@
+---
+import EveStaticLayout from '@layouts/EveStaticLayout.astro';
+---
+
+<EveStaticLayout title="More Information">
+  <div class="h-full py-12 px-6 uppercase max-md:space-y-10 md:grid grid-cols-2 justify-items-center items-center gap-10">
+    <header class="justify-self-start mt-5 z-20">
+      <h1 class="font-serif text-pink text-7xl md:text-8xl lg:text-9xl text-center tracking-tighter md:text-start">More Info</h1>
+    </header>
+    <main class="text-black uppercase text-xs tracking-wide h-full w-fit md:overflow-y-scroll hide-scrollbar lg:pb-10 space-y-5 max-w-md">
+      <div class="space-y-2">
+        <h1 class="font-serif text-pink text-4xl tracking-tighter">
+          Where
+        </h1>
+        <p class="text-black uppercase text-sm md:text-base">
+          Our wedding reception is at the fabulous Hoxton hotel in Southwark. We’re up on the 12<sup class="lowercase">th</sup> floor, and our entrance and lifts are on the far righthand side of the building. (Just ask the main reception if you’re not sure!)
+        </p>
+        <p class="text-black uppercase text-sm md:text-base">
+          Address - 40 Blackfriars Rd, South Bank, London SE1 8NY
+        </p>
+      </div>
+      <div class="space-y-2">
+        <h1 class="font-serif text-pink text-4xl tracking-tighter">
+          Accommodation
+        </h1>
+        <p class="text-black uppercase text-sm md:text-base">
+          Book a room at the <a href="https://thehoxton.com/london/southwark/" target="_blank" class="text-black uppercase text-sm md:text-base underline underline-offset-2">The Hoxton</a> 
+          for the wedding. Make sure to pick Southwark location and use the discount
+          code HITCHED2477 for 15% off!
+        </p>
+        <p class="text-black uppercase text-sm md:text-base [&_a]:underline [&_a]:underline-offset-2">
+          Or stay at the nearby <a href="https://all.accor.com/hotel/7942/index.en.shtml" target="_blank">Novotel</a> or <a href="https://all.accor.com/hotel/7943/index.en.shtml" target="_blank">Ibis</a> hotels.
+        </p>
+      </div>
+      <div class="space-y-2">
+        <h1 class="font-serif text-pink text-4xl tracking-tighter">
+          Getting Around
+        </h1>
+        <p class="text-black uppercase text-sm md:text-base">
+          The closest train stations are Waterloo and London Bridge stations – both about a 10 min walk.
+        </p>
+        <p class="text-black uppercase text-sm md:text-base">
+          Southwark Tube (Jubilee Line) is the closest underground station.
+        </p>
+        <p class="text-black uppercase text-sm md:text-base [&_a]:underline underline-offset-2">
+          Download <a href="https://apps.apple.com/gb/app/citymapper-live-transport/id469463298" target="_blank">City Mapper</a> for making your way around the city. It has real-time transport info and route planning.
+        </p>
+      </div>
+    </main>
+  </div>
+</EveStaticLayout>
